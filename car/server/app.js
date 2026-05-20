@@ -11,20 +11,30 @@ const apiRouter = express.Router();
 const uploadsDir = process.env.VERCEL
   ? path.join('/tmp', 'uploads')
   : path.join(__dirname, 'uploads');
-const allowedOrigins = (process.env.CORS_ORIGIN || process.env.FRONTEND_URL || '')
+const defaultAllowedOrigins = [
+  'https://smartmobile-client.vercel.app',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173'
+];
+const allowedOrigins = [
+  ...defaultAllowedOrigins,
+  ...(process.env.CORS_ORIGIN || process.env.FRONTEND_URL || '')
   .split(',')
   .map((origin) => origin.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+];
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
 
     return callback(new Error(`Origin ${origin} is not allowed by CORS`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));

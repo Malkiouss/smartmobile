@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import CarCard from '../components/CarCard';
 import api from '../services/api';
+import { unwrapArray } from '../services/response';
 import './Cars.css';
 
 const brands = ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche', 'Land Rover', 'Volkswagen', 'Toyota', 'Honda'];
@@ -43,7 +44,7 @@ const Cars = () => {
       if (f.maxPrice) params.maxPrice = f.maxPrice;
       if (f.minYear) params.minYear = f.minYear;
       const res = await api.get('/cars', { params });
-      setCars(res.data);
+      setCars(unwrapArray(res.data));
     } catch (err) {
       console.error('Error fetching cars:', err);
     } finally {

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { FiCalendar, FiNavigation, FiTag, FiPackage, FiArrowLeft } from 'react-icons/fi';
 import WhatsAppButton from '../components/WhatsAppButton';
 import api from '../services/api';
+import { unwrapData } from '../services/response';
 import './CarDetails.css';
 
 const CarDetails = () => {
@@ -18,7 +19,7 @@ const CarDetails = () => {
   const fetchCar = async () => {
     try {
       const res = await api.get(`/cars/${id}`);
-      setCar(res.data);
+      setCar(unwrapData(res.data));
     } catch (err) {
       console.error('Error fetching car:', err);
     } finally {

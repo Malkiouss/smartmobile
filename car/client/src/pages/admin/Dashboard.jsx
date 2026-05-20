@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiToggleLeft, FiToggleRight, FiPackage } from 'react-icons/fi';
 import api from '../../services/api';
+import { unwrapArray, unwrapData } from '../../services/response';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -15,7 +16,7 @@ const Dashboard = () => {
   const fetchCars = async () => {
     try {
       const res = await api.get('/cars');
-      setCars(res.data);
+      setCars(unwrapArray(res.data));
     } catch (err) {
       console.error('Error fetching cars:', err);
     } finally {
@@ -36,7 +37,7 @@ const Dashboard = () => {
   const handleToggleStatus = async (id) => {
     try {
       const res = await api.patch(`/cars/${id}/status`);
-      setCars(cars.map(car => car._id === id ? res.data : car));
+      setCars(cars.map(car => car._id === id ? unwrapData(res.data) : car));
     } catch (err) {
       alert('Erreur lors de la mise à jour du statut');
     }

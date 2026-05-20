@@ -14,6 +14,7 @@ import SearchBar from '../components/SearchBar';
 import StatsBar from '../components/StatsBar';
 import CarCard from '../components/CarCard';
 import api from '../services/api';
+import { unwrapArray } from '../services/response';
 import './Home.css';
 
 const whyChooseUs = [
@@ -77,7 +78,7 @@ const Home = () => {
   const fetchPopularCars = async () => {
     try {
       const res = await api.get('/cars');
-      setPopularCars(res.data.slice(0, 4));
+      setPopularCars(unwrapArray(res.data).slice(0, 4));
     } catch (err) {
       console.error('Error fetching cars:', err);
     } finally {

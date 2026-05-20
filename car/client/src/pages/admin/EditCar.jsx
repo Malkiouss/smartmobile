@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { FiArrowLeft, FiUpload } from 'react-icons/fi';
 import api from '../../services/api';
+import { unwrapData } from '../../services/response';
 import './AddCar.css';
 
 const EditCar = () => {
@@ -23,7 +24,7 @@ const EditCar = () => {
   const fetchCar = async () => {
     try {
       const res = await api.get(`/cars/${id}`);
-      const car = res.data;
+      const car = unwrapData(res.data);
       setForm({
         name: car.name || '', brand: car.brand || '', model: car.model || '',
         year: car.year || '', mileage: car.mileage || '', price: car.price || '',
