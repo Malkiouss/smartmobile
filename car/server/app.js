@@ -2,15 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const ensureDB = require('./middleware/db');
 
 dotenv.config();
 
-connectDB().catch((error) => {
-  console.error('MongoDB connection failed:', error.message);
-});
-
 const app = express();
+const apiRouter = express.Router();
 
 app.use(cors());
 app.use(express.json());
@@ -18,11 +15,22 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api/cars', require('./routes/cars'));
-app.use('/api/auth', require('./routes/auth'));
+const healthHandler = (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'AutoSmart Maroc API is running',
+    databaseConfigured: Boolean(process.env.MONGODB_URI)
+  });
+};
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'AutoSmart Maroc API is running' });
-});
+apiRouter.get('/', healthHandler);
+apiRouter.get('/health', healthHandler);
+
+apiRouter.use(ensureDB);
+apiRouter.use('/cars', require('./routes/cars'));
+apiRouter.use('/auth', require('./routes/auth'));
+
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 module.exports = app;
