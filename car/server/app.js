@@ -25,6 +25,12 @@ const healthHandler = (req, res) => {
 
 apiRouter.get('/', healthHandler);
 apiRouter.get('/health', healthHandler);
+apiRouter.get('/health/db', ensureDB, (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Database connection is working'
+  });
+});
 
 apiRouter.use(ensureDB);
 apiRouter.use('/cars', require('./routes/cars'));
