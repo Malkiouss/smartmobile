@@ -7,7 +7,7 @@
     "car/server"
   ],
   "scripts": {
-    "build": "npm --prefix car/client run build",
+    "build": "npm --prefix car/client run build && node scripts/copy-client-dist.js",
     "dev": "npm --prefix car/client run dev",
     "server": "npm --prefix car/server start",
     "server:dev": "npm --prefix car/server run dev"
