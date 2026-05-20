@@ -1,0 +1,15 @@
+{
+  "name": "smartmobile",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "car/client",
+    "car/server"
+  ],
+  "scripts": {
+    "build": "npm --prefix car/client run build",
+    "dev": "npm --prefix car/client run dev",
+    "server": "npm --prefix car/server start",
+    "server:dev": "npm --prefix car/server run dev"
+  }
+}
