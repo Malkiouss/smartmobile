@@ -33,4 +33,12 @@ apiRouter.use('/auth', require('./routes/auth'));
 app.use('/api', apiRouter);
 app.use('/', apiRouter);
 
+app.use((req, res) => {
+  res.status(404).json({
+    message: 'API route not found',
+    method: req.method,
+    path: req.originalUrl
+  });
+});
+
 module.exports = app;

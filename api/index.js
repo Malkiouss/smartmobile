@@ -1,1 +1,1 @@
-module.exports = require('../car/server/app');
+module.exports = require('./handler');
