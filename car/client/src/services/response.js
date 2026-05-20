@@ -8,5 +8,20 @@ export const unwrapData = (payload) => {
 
 export const unwrapArray = (payload) => {
   const data = unwrapData(payload);
-  return Array.isArray(data) ? data : [];
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (data && typeof data === 'object') {
+    if (Array.isArray(data.cars)) {
+      return data.cars;
+    }
+
+    if (Array.isArray(data.items)) {
+      return data.items;
+    }
+  }
+
+  return [];
 };
