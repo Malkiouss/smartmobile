@@ -4,31 +4,14 @@
   "installCommand": "npm install --prefix car/client && npm install --prefix car/server",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "builds": [
+  "rewrites": [
     {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "client/dist"
-      }
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
     },
     {
-      "src": "server/routes/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "source": "/((?!api/.*).*)",
+      "source": "/:path*",
       "destination": "/index.html"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/routes/cars.js"
-    },
-    {
-      "src": "/auth/(.*)",
-      "dest": "/server/routes/auth.js"
     }
   ]
 }

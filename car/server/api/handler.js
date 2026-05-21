@@ -6,17 +6,19 @@ const defaultAllowedOrigins = [
   'http://127.0.0.1:5173'
 ];
 
+const normalizeOrigin = (origin) => origin.replace(/\/+$/, '');
 const allowedOrigins = [
-  ...defaultAllowedOrigins,
+  ...defaultAllowedOrigins.map(normalizeOrigin),
   ...(process.env.CORS_ORIGIN || process.env.FRONTEND_URL || '')
     .split(',')
     .map((origin) => origin.trim())
+    .map(normalizeOrigin)
     .filter(Boolean)
 ];
 
 const getAllowedOrigin = (origin) => {
-  if (origin && allowedOrigins.includes(origin)) {
-    return origin;
+  if (origin && allowedOrigins.includes(normalizeOrigin(origin))) {
+    return normalizeOrigin(origin);
   }
 
   return allowedOrigins[0];

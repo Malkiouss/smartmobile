@@ -16,16 +16,32 @@ const defaultAllowedOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173'
 ];
+const normalizeOrigin = (origin) => origin.replace(/\/+$/, '');
 const allowedOrigins = [
-  ...defaultAllowedOrigins,
+  ...defaultAllowedOrigins.map(normalizeOrigin),
   ...(process.env.CORS_ORIGIN || process.env.FRONTEND_URL || '')
   .split(',')
   .map((origin) => origin.trim())
+  .map(normalizeOrigin)
   .filter(Boolean)
 ];
+const getAllowedOrigin = (origin) => {
+  if (origin && allowedOrigins.includes(normalizeOrigin(origin))) {
+    return normalizeOrigin(origin);
+  }
+
+  return allowedOrigins[0];
+};
+const setCorsHeaders = (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', getAllowedOrigin(req.headers && req.headers.origin));
+  res.setHeader('Vary', 'Origin');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+};
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
       return callback(null, true);
     }
 
@@ -37,6 +53,15 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
+app.use((req, res, next) => {
+  setCorsHeaders(req, res);
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  return next();
+});
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json());
