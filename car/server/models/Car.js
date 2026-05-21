@@ -37,8 +37,12 @@ const carSchema = new mongoose.Schema({
     default: ''
   },
   images: [{
-    type: String
+    type: mongoose.Schema.Types.Mixed
   }],
+  image: {
+    type: String,
+    default: ''
+  },
   quantity: {
     type: Number,
     default: 1

@@ -123,12 +123,12 @@ const AddCar = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Images (max 5)</label>
+              <label className="form-label">Images (max 10)</label>
               <div className="add-car-upload">
                 <input
                   type="file"
                   multiple
-                  accept="image/*"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
                   onChange={handleImageChange}
                   className="add-car-file-input"
                   id="car-images-input"
@@ -136,7 +136,7 @@ const AddCar = () => {
                 <label htmlFor="car-images-input" className="add-car-upload-label">
                   <FiUpload size={24} />
                   <span>Cliquez pour ajouter des photos</span>
-                  <span className="add-car-upload-hint">JPG, PNG, WebP jusqu'à 5MB</span>
+                  <span className="add-car-upload-hint">JPG, PNG, WebP jusqu'à 5MB par image</span>
                 </label>
               </div>
               {imagePreviews.length > 0 && (

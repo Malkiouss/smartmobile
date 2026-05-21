@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { FiArrowLeft, FiUpload } from 'react-icons/fi';
 import api from '../../services/api';
+import { getCarImages } from '../../services/images';
 import { unwrapData } from '../../services/response';
 import './AddCar.css';
 
@@ -31,7 +32,7 @@ const EditCar = () => {
         description: car.description || '', shortDescription: car.shortDescription || '',
         quantity: car.quantity || 1, status: car.status || 'available'
       });
-      setExistingImages(car.images || []);
+      setExistingImages(getCarImages(car, ''));
     } catch (err) {
       setError('Voiture introuvable');
     } finally {
@@ -131,7 +132,7 @@ const EditCar = () => {
             <div className="form-group">
               <label className="form-label">Nouvelles images (remplacent les actuelles)</label>
               <div className="add-car-upload">
-                <input type="file" multiple accept="image/*" onChange={handleImageChange} className="add-car-file-input" id="edit-car-images" />
+                <input type="file" multiple accept="image/jpeg,image/jpg,image/png,image/webp" onChange={handleImageChange} className="add-car-file-input" id="edit-car-images" />
                 <label htmlFor="edit-car-images" className="add-car-upload-label">
                   <FiUpload size={24} /><span>Cliquez pour remplacer les photos</span>
                 </label>

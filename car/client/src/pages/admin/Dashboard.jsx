@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiEdit2, FiTrash2, FiToggleLeft, FiToggleRight, FiPackage } from 'react-icons/fi';
 import api from '../../services/api';
+import { getCarImages } from '../../services/images';
 import { unwrapArray, unwrapData } from '../../services/response';
 import './Dashboard.css';
 
@@ -106,7 +107,7 @@ const Dashboard = () => {
                   <tr key={car._id}>
                     <td>
                       <img
-                        src={car.images?.[0] || 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=100&q=60'}
+                        src={getCarImages(car, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=100&q=60')[0]}
                         alt={car.name}
                         className="dashboard-car-thumb"
                       />

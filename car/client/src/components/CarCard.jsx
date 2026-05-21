@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiHeart, FiCalendar, FiNavigation } from 'react-icons/fi';
+import { getCarImages } from '../services/images';
 import './CarCard.css';
 
 const CarCard = ({ car }) => {
@@ -11,9 +12,7 @@ const CarCard = ({ car }) => {
     return new Intl.NumberFormat('fr-MA').format(price);
   };
 
-  const imageUrl = car.images && car.images.length > 0
-    ? car.images[0]
-    : 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&q=80';
+  const imageUrl = getCarImages(car, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&q=80')[0];
 
   return (
     <div className={`car-card ${isSold ? 'car-card--sold' : ''}`} id={`car-card-${car._id}`}>

@@ -3,6 +3,38 @@ const router = express.Router();
 const Car = require('../models/Car');
 const { protect } = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const cloudinary = require('../config/cloudinary');
+
+const uploadImages = upload.array('images', 10);
+
+const runUpload = (req, res, next) => {
+  uploadImages(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    return next();
+  });
+};
+
+const toCloudinaryImages = (files = []) => files.map((file) => ({
+  url: file.path,
+  public_id: file.filename
+}));
+
+const getPublicIds = (images = []) => images
+  .map((image) => image && typeof image === 'object' ? image.public_id : null)
+  .filter(Boolean);
+
+const deleteCloudinaryImages = async (images = []) => {
+  const publicIds = getPublicIds(images);
+
+  if (publicIds.length === 0) {
+    return;
+  }
+
+  await Promise.allSettled(publicIds.map((publicId) => cloudinary.uploader.destroy(publicId)));
+};
 
 /**
  * @route   GET /api/cars
@@ -49,11 +81,11 @@ router.get('/:id', async (req, res) => {
  * @desc    Create a new car
  * @access  Admin
  */
-router.post('/', protect, upload.array('images', 5), async (req, res) => {
+router.post('/', protect, runUpload, async (req, res) => {
   try {
     const { name, brand, model, year, mileage, price, description, shortDescription, quantity, status } = req.body;
 
-    const images = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+    const images = toCloudinaryImages(req.files);
 
     const car = await Car.create({
       name,
@@ -80,7 +112,7 @@ router.post('/', protect, upload.array('images', 5), async (req, res) => {
  * @desc    Update a car
  * @access  Admin
  */
-router.put('/:id', protect, upload.array('images', 5), async (req, res) => {
+router.put('/:id', protect, runUpload, async (req, res) => {
   try {
     const car = await Car.findById(req.params.id);
     if (!car) {
@@ -102,10 +134,11 @@ router.put('/:id', protect, upload.array('images', 5), async (req, res) => {
 
     /* If new images uploaded, add them; if keepImages is false, replace */
     if (req.files && req.files.length > 0) {
-      const newImages = req.files.map(file => `/uploads/${file.filename}`);
+      const newImages = toCloudinaryImages(req.files);
       if (keepImages === 'true') {
-        car.images = [...car.images, ...newImages];
+        car.images = [...(car.images || []), ...newImages];
       } else {
+        await deleteCloudinaryImages(car.images);
         car.images = newImages;
       }
     }
@@ -128,6 +161,7 @@ router.delete('/:id', protect, async (req, res) => {
     if (!car) {
       return res.status(404).json({ message: 'Car not found' });
     }
+    await deleteCloudinaryImages(car.images);
     await Car.findByIdAndDelete(req.params.id);
     res.json({ message: 'Car removed' });
   } catch (error) {

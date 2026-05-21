@@ -8,9 +8,6 @@ dotenv.config();
 
 const app = express();
 const apiRouter = express.Router();
-const uploadsDir = process.env.VERCEL
-  ? path.join('/tmp', 'uploads')
-  : path.join(__dirname, 'uploads');
 const defaultAllowedOrigins = [
   'https://smartmobile-client.vercel.app',
   'http://localhost:5173',
@@ -67,7 +64,9 @@ app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/uploads', express.static(uploadsDir));
+if (!process.env.VERCEL) {
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+}
 
 const healthHandler = (req, res) => {
   res.json({

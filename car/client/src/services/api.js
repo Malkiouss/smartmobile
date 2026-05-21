@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiBaseURL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+const apiBaseURL = (import.meta.env.VITE_API_URL || 'https://smartmobile-server.vercel.app').replace(/\/$/, '');
 
 const api = axios.create({
   baseURL: apiBaseURL,
