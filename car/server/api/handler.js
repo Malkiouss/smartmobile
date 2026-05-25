@@ -2,6 +2,8 @@ const app = require('../app');
 
 const defaultAllowedOrigins = [
   'https://smartmobile-client.vercel.app',
+  'https://www.autosmartmaroc.com',
+  'https://autosmartmaroc.com',
   'http://localhost:5173',
   'http://127.0.0.1:5173'
 ];
@@ -9,23 +11,34 @@ const defaultAllowedOrigins = [
 const normalizeOrigin = (origin) => origin.replace(/\/+$/, '');
 const allowedOrigins = [
   ...defaultAllowedOrigins.map(normalizeOrigin),
-  ...(process.env.CORS_ORIGIN || process.env.FRONTEND_URL || '')
+  ...[
+    process.env.CORS_ORIGIN,
+    process.env.FRONTEND_URL,
+    process.env.CLIENT_URL
+  ]
+    .filter(Boolean)
+    .join(',')
     .split(',')
     .map((origin) => origin.trim())
     .map(normalizeOrigin)
     .filter(Boolean)
-];
+].filter((origin, index, origins) => origins.indexOf(origin) === index);
 
 const getAllowedOrigin = (origin) => {
   if (origin && allowedOrigins.includes(normalizeOrigin(origin))) {
     return normalizeOrigin(origin);
   }
 
-  return allowedOrigins[0];
+  return null;
 };
 
 const setCorsHeaders = (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', getAllowedOrigin(req.headers && req.headers.origin));
+  const allowedOrigin = getAllowedOrigin(req.headers && req.headers.origin);
+
+  if (allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  }
+
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');

@@ -16,7 +16,7 @@ Add these Environment Variables in Vercel:
 
 - `MONGODB_URI`
 - `JWT_SECRET`
-- `CORS_ORIGIN=https://smartmobile-client.vercel.app`
+- `CORS_ORIGIN=https://smartmobile-client.vercel.app,https://www.autosmartmaroc.com,https://autosmartmaroc.com`
 
 After deploy, test:
 
