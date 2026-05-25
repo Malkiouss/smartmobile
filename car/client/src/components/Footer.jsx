@@ -3,6 +3,14 @@ import { FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import './Footer.css';
 
+const WHATSAPP_NUMBER = '212707852423';
+
+const socialLinks = [
+  { label: 'Facebook', href: '#', icon: <FaFacebookF /> },
+  { label: 'Instagram', href: '#', icon: <FaInstagram /> },
+  { label: 'WhatsApp', href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: <FaWhatsapp /> },
+];
+
 const Footer = () => {
   return (
     <footer className="footer" id="site-footer">
@@ -15,13 +23,22 @@ const Footer = () => {
               <span className="logo-maroc">MAROC</span>
             </Link>
             <p className="footer-desc">
-              La plateforme n°1 de vente de voitures de luxe au Maroc. 
-              Trouvez votre véhicule idéal parmi notre sélection premium.
+              Nous vendons des voitures soigneusement sélectionnées au Maroc, avec des annonces claires,
+              un accompagnement réactif et des prix transparents.
             </p>
             <div className="footer-socials">
-              <a href="#" className="footer-social" aria-label="Facebook"><FaFacebookF /></a>
-              <a href="#" className="footer-social" aria-label="Instagram"><FaInstagram /></a>
-              <a href="#" className="footer-social" aria-label="WhatsApp"><FaWhatsapp /></a>
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  className="footer-social"
+                  aria-label={social.label}
+                  target={social.href.startsWith('http') ? '_blank' : undefined}
+                  rel={social.href.startsWith('http') ? 'noreferrer' : undefined}
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </div>
 
@@ -43,15 +60,15 @@ const Footer = () => {
               <li><Link to="/voitures?brand=Mercedes-Benz">Mercedes-Benz</Link></li>
               <li><Link to="/voitures?brand=Audi">Audi</Link></li>
               <li><Link to="/voitures?brand=Porsche">Porsche</Link></li>
-              <li><Link to="/voitures?brand=Range Rover">Range Rover</Link></li>
+              <li><Link to="/voitures?brand=Volkswagen">Golf</Link></li>
             </ul>
           </div>
 
           <div className="footer-col">
             <h4 className="footer-col-title">Contact</h4>
             <ul className="footer-col-links footer-contact">
-              <li><FiMapPin /> Casablanca, Maroc</li>
-              <li><FiPhone /> +212 XXX XXX XXX</li>
+              <li><FiMapPin /> Fes Meknes, Maroc</li>
+              <li><FiPhone />  +212 707-852423</li>
               <li><FiMail /> contact@autosmart.ma</li>
             </ul>
           </div>

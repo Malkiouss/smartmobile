@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Cars from './pages/Cars';
@@ -33,6 +34,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
+      <WhatsAppButton floating />
     </div>
   );
 }

@@ -31,7 +31,7 @@ const About = () => {
           </div>
           <div className="about-story-image">
             <img
-              src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80"
+              src="https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg"
               alt="Voiture de luxe - AutoSmart Maroc"
             />
           </div>

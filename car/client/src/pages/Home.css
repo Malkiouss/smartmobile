@@ -130,6 +130,40 @@
   margin-bottom: 28px;
 }
 
+.home-about-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.home-about-socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-about-social {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-light);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.home-about-social:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
 .home-about-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -401,6 +435,11 @@
 
   .home-about-stats {
     order: -1;
+  }
+
+  .home-about-actions {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .home-sell-cta {

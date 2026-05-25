@@ -47,14 +47,14 @@ const Contact = () => {
               <div className="contact-info-icon"><FiMapPin /></div>
               <div>
                 <h3>Adresse</h3>
-                <p>Casablanca, Maroc</p>
+                <p>Fes Meknes, Maroc</p>
               </div>
             </div>
             <div className="contact-info-card">
               <div className="contact-info-icon"><FiPhone /></div>
               <div>
                 <h3>Téléphone</h3>
-                <p>+212 XXX XXX XXX</p>
+                <p> +212 707-852423</p>
               </div>
             </div>
             <div className="contact-info-card">

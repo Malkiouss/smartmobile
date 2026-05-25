@@ -7,8 +7,9 @@ import {
   FiUsers,
   FiStar,
   FiPhone,
+  FiArrowRight,
 } from 'react-icons/fi';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import HeroSection from '../components/HeroSection';
 import SearchBar from '../components/SearchBar';
 import StatsBar from '../components/StatsBar';
@@ -64,8 +65,14 @@ const testimonials = [
   },
 ];
 
-const WHATSAPP_NUMBER = '212XXXXXXXXX';
-const PHONE_DISPLAY = '+212 6XX XX XX XX';
+const WHATSAPP_NUMBER = '212707852423';
+const PHONE_DISPLAY = '+212 707-852423';
+
+const socialLinks = [
+  { label: 'Facebook', href: '#', icon: <FaFacebookF /> },
+  { label: 'Instagram', href: '#', icon: <FaInstagram /> },
+  { label: 'WhatsApp', href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: <FaWhatsapp /> },
+];
 
 const Home = () => {
   const [popularCars, setPopularCars] = useState([]);
@@ -99,28 +106,8 @@ const Home = () => {
       <SearchBar />
       <StatsBar />
 
-      {/* Why Choose Us */}
-      <section className="section home-why" id="why-choose-us">
-        <div className="container">
-          <div className="home-section-header">
-            <h2 className="section-title">Pourquoi nous choisir</h2>
-            <p className="section-subtitle">
-              Une plateforme moderne et fiable pour acheter et vendre des voitures au Maroc
-            </p>
-          </div>
-          <div className="home-why-grid">
-            {whyChooseUs.map((item, idx) => (
-              <article className="home-why-card fade-in" key={idx} style={{ animationDelay: `${idx * 0.08}s` }}>
-                <div className="home-why-icon">{item.icon}</div>
-                <h3 className="home-why-title">{item.title}</h3>
-                <p className="home-why-desc">{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Popular Cars */}
+        {/* Popular Cars */}
       <section className="section popular-section home-section-alt" id="popular-cars">
         <div className="container">
           <div className="popular-header">
@@ -148,6 +135,29 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Why Choose Us */}
+      <section className="section home-why" id="why-choose-us">
+        <div className="container">
+          <div className="home-section-header">
+            <h2 className="section-title">Pourquoi nous choisir</h2>
+            <p className="section-subtitle">
+              Une plateforme moderne et fiable pour acheter et vendre des voitures au Maroc
+            </p>
+          </div>
+          <div className="home-why-grid">
+            {whyChooseUs.map((item, idx) => (
+              <article className="home-why-card fade-in" key={idx} style={{ animationDelay: `${idx * 0.08}s` }}>
+                <div className="home-why-icon">{item.icon}</div>
+                <h3 className="home-why-title">{item.title}</h3>
+                <p className="home-why-desc">{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    
+
       {/* About Us */}
       <section className="section home-about" id="home-about">
         <div className="container home-about-grid">
@@ -155,16 +165,34 @@ const Home = () => {
             <span className="home-about-label">À propos</span>
             <h2 className="section-title">Votre partenaire auto au Maroc</h2>
             <p className="home-about-lead">
-              Nous aidons les clients à travers le Maroc à trouver des voitures de qualité aux meilleurs
-              prix grâce à une plateforme moderne, transparente et de confiance.
+              Nous vendons des voitures sélectionnées avec soin pour aider chaque client à trouver un
+              véhicule fiable, élégant et adapté à son budget.
             </p>
             <p className="home-about-body">
-              AutoSmart Maroc connecte acheteurs et vendeurs avec des annonces claires, un support réactif
-              et une expérience fluide sur mobile comme sur ordinateur.
+              AutoSmart Maroc propose des annonces claires, des prix transparents et un accompagnement
+              réactif du premier contact jusqu&apos;à l&apos;achat. Suivez-nous aussi sur les réseaux sociaux
+              pour découvrir nos nouvelles arrivées et nos meilleures offres.
             </p>
-            <Link to="/a-propos" className="btn btn-primary">
-              En savoir plus
-            </Link>
+            <div className="home-about-actions">
+              <Link to="/a-propos" className="btn btn-primary">
+                En savoir plus
+                <FiArrowRight />
+              </Link>
+              <div className="home-about-socials" aria-label="Réseaux sociaux AutoSmart Maroc">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="home-about-social"
+                    aria-label={social.label}
+                    target={social.href.startsWith('http') ? '_blank' : undefined}
+                    rel={social.href.startsWith('http') ? 'noreferrer' : undefined}
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
           <div className="home-about-stats">
             <div className="home-about-stat-card">
@@ -181,7 +209,7 @@ const Home = () => {
             </div>
             <div className="home-about-image">
               <img
-                src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80"
+                src="https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg"
                 alt="Showroom automobile"
               />
             </div>
