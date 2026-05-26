@@ -8,7 +8,7 @@ const WHATSAPP_NUMBER = '212707852423';
 
 const socialLinks = [
   { label: 'Facebook', href: 'https://www.facebook.com/share/1FbVLk3yJx/?mibextid=wwXIfr', icon: <FaFacebookF /> },
-  { label: 'Instagram', href: 'https://www.instagram.com/autosmartmaroc.ma?igsh=enQ2MmJnM2N6OHkx&utm_source=qr', icon: <FaInstagram /> },
+  { label: 'Instagram', href: 'https://www.instagram.com/autosmart.maroc?igsh=enQ2MmJnM2N6OHkx&utm_source=qr', icon: <FaInstagram /> },
   { label: 'WhatsApp', href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: <FaWhatsapp /> },
 ];
 
