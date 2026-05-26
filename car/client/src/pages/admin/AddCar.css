@@ -58,18 +58,99 @@
 .add-car-upload-hint { font-size: 0.8rem; color: var(--text-muted); }
 
 .add-car-previews {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
   gap: 12px;
   margin-top: 16px;
-  flex-wrap: wrap;
 }
 
 .add-car-preview-img {
-  width: 100px;
-  height: 72px;
+  width: 100%;
+  height: 96px;
   object-fit: cover;
   border-radius: var(--radius-sm);
   border: 2px solid var(--border);
+}
+
+.add-car-previews:not(.add-car-previews--sortable) {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 120px));
+}
+
+.add-car-order-hint {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.add-car-preview-card {
+  min-width: 0;
+  cursor: grab;
+}
+
+.add-car-preview-card:active {
+  cursor: grabbing;
+}
+
+.add-car-preview-image-wrap {
+  position: relative;
+}
+
+.add-car-main-badge {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  max-width: calc(100% - 48px);
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+[dir="rtl"] .add-car-main-badge {
+  left: auto;
+  right: 8px;
+}
+
+.add-car-remove-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(229, 62, 62, 0.95);
+  color: #fff;
+}
+
+[dir="rtl"] .add-car-remove-btn {
+  right: auto;
+  left: 8px;
+}
+
+.add-car-preview-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.add-car-preview-actions button {
+  flex: 1;
+  min-height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-light);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.add-car-preview-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
@@ -99,5 +180,13 @@
 
   .add-car-upload-label {
     padding: 24px 16px;
+  }
+
+  .add-car-previews {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .add-car-preview-img {
+    height: 112px;
   }
 }

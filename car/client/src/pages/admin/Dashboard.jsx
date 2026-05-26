@@ -4,9 +4,11 @@ import { FiPlus, FiEdit2, FiTrash2, FiToggleLeft, FiToggleRight, FiPackage } fro
 import api from '../../services/api';
 import { getCarImages } from '../../services/images';
 import { unwrapArray, unwrapData } from '../../services/response';
+import { useLanguage } from '../../context/LanguageContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const { language, t } = useLanguage();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,12 +28,12 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (id, name) => {
-    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer "${name}" ?`)) return;
+    if (!window.confirm(t('admin.confirmDelete').replace('{{name}}', name))) return;
     try {
       await api.delete(`/cars/${id}`);
       setCars(cars.filter(car => car._id !== id));
     } catch (err) {
-      alert('Erreur lors de la suppression');
+      alert(t('admin.deleteError'));
     }
   };
 
@@ -40,51 +42,49 @@ const Dashboard = () => {
       const res = await api.patch(`/cars/${id}/status`);
       setCars(cars.map(car => car._id === id ? unwrapData(res.data) : car));
     } catch (err) {
-      alert('Erreur lors de la mise à jour du statut');
+      alert(t('admin.statusError'));
     }
   };
 
-  const formatPrice = (price) => new Intl.NumberFormat('fr-MA').format(price);
+  const formatPrice = (price) => new Intl.NumberFormat(language === 'ar' ? 'ar-MA' : 'fr-MA').format(price);
 
   return (
     <div className="dashboard" id="admin-dashboard">
       <div className="container">
         <div className="dashboard-header">
           <div>
-            <h1 className="dashboard-title">Dashboard Admin</h1>
-            <p className="dashboard-subtitle">Gérez vos voitures et annonces</p>
+            <h1 className="dashboard-title">{t('admin.title')}</h1>
+            <p className="dashboard-subtitle">{t('admin.subtitle')}</p>
           </div>
           <Link to="/admin/add" className="btn btn-primary" id="add-car-btn">
-            <FiPlus /> Ajouter une voiture
+            <FiPlus /> {t('admin.addCar')}
           </Link>
         </div>
 
-        {/* Stats */}
         <div className="dashboard-stats">
           <div className="dashboard-stat-card">
             <FiPackage className="dashboard-stat-icon" />
             <div>
               <span className="dashboard-stat-value">{cars.length}</span>
-              <span className="dashboard-stat-label">Total voitures</span>
+              <span className="dashboard-stat-label">{t('admin.totalCars')}</span>
             </div>
           </div>
           <div className="dashboard-stat-card">
             <FiToggleRight className="dashboard-stat-icon success" />
             <div>
               <span className="dashboard-stat-value">{cars.filter(c => c.status === 'available').length}</span>
-              <span className="dashboard-stat-label">Disponibles</span>
+              <span className="dashboard-stat-label">{t('admin.availableCars')}</span>
             </div>
           </div>
           <div className="dashboard-stat-card">
             <FiToggleLeft className="dashboard-stat-icon danger" />
             <div>
               <span className="dashboard-stat-value">{cars.filter(c => c.status === 'sold').length}</span>
-              <span className="dashboard-stat-label">Vendues</span>
+              <span className="dashboard-stat-label">{t('admin.soldCars')}</span>
             </div>
           </div>
         </div>
 
-        {/* Cars Table */}
         {loading ? (
           <div className="spinner" />
         ) : (
@@ -92,14 +92,14 @@ const Dashboard = () => {
             <table className="dashboard-table">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th>Nom</th>
-                  <th>Marque</th>
-                  <th>Année</th>
-                  <th>Prix (DH)</th>
-                  <th>Qté</th>
-                  <th>Statut</th>
-                  <th>Actions</th>
+                  <th>{t('admin.image')}</th>
+                  <th>{t('admin.name')}</th>
+                  <th>{t('admin.brand')}</th>
+                  <th>{t('admin.year')}</th>
+                  <th>{t('admin.price')}</th>
+                  <th>{t('admin.qty')}</th>
+                  <th>{t('admin.status')}</th>
+                  <th>{t('admin.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -119,7 +119,7 @@ const Dashboard = () => {
                     <td>{car.quantity}</td>
                     <td>
                       <span className={`badge ${car.status === 'sold' ? 'badge-sold' : 'badge-available'}`}>
-                        {car.status === 'sold' ? 'Vendu' : 'Dispo'}
+                        {car.status === 'sold' ? t('car.sold') : t('car.availableShort')}
                       </span>
                     </td>
                     <td>
@@ -127,21 +127,21 @@ const Dashboard = () => {
                         <button
                           className="dashboard-action-btn toggle"
                           onClick={() => handleToggleStatus(car._id)}
-                          title={car.status === 'available' ? 'Marquer vendu' : 'Marquer disponible'}
+                          title={car.status === 'available' ? t('admin.markSold') : t('admin.markAvailable')}
                         >
                           {car.status === 'available' ? <FiToggleRight /> : <FiToggleLeft />}
                         </button>
                         <Link
                           to={`/admin/edit/${car._id}`}
                           className="dashboard-action-btn edit"
-                          title="Modifier"
+                          title={t('admin.edit')}
                         >
                           <FiEdit2 />
                         </Link>
                         <button
                           className="dashboard-action-btn delete"
                           onClick={() => handleDelete(car._id, car.name)}
-                          title="Supprimer"
+                          title={t('admin.delete')}
                         >
                           <FiTrash2 />
                         </button>
@@ -152,7 +152,7 @@ const Dashboard = () => {
                 {cars.length === 0 && (
                   <tr>
                     <td colSpan="8" className="dashboard-empty">
-                      Aucune voiture. <Link to="/admin/add">Ajoutez votre première voiture →</Link>
+                      {t('admin.noCars')} <Link to="/admin/add">{t('admin.addFirst')}</Link>
                     </td>
                   </tr>
                 )}

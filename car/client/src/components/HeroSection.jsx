@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 import './HeroSection.css';
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="hero" id="hero-section">
       <div className="hero-bg">
@@ -16,18 +19,16 @@ const HeroSection = () => {
       <div className="container hero-content">
         <div className="hero-text">
           <h1 className="hero-title">
-            Trouvez la voiture
-            <span className="hero-title-accent"> de vos rêves</span>
+            {t('hero.title')}
+            <span className="hero-title-accent">{t('hero.titleAccent')}</span>
           </h1>
-          <p className="hero-subtitle">
-            Des voitures de qualité au meilleur prix au Maroc
-          </p>
+          <p className="hero-subtitle">{t('hero.subtitle')}</p>
           <div className="hero-actions">
             <Link to="/voitures" className="btn btn-primary btn-lg" id="hero-btn-cars">
-              Voir les voitures
+              {t('hero.viewCars')}
             </Link>
             <Link to="/vendre" className="btn btn-white btn-lg" id="hero-btn-sell">
-              Vendre ma voiture
+              {t('hero.sellCar')}
             </Link>
           </div>
         </div>
@@ -37,7 +38,7 @@ const HeroSection = () => {
           <div className="hero-image">
             <img
               src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=80"
-              alt="BMW M5 Competition - Voiture de luxe"
+              alt="BMW M5 Competition"
               className="hero-car-img"
             />
           </div>

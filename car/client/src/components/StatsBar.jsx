@@ -1,14 +1,16 @@
 import { FiTruck, FiShield, FiDollarSign, FiHeadphones } from 'react-icons/fi';
+import { useLanguage } from '../context/LanguageContext';
 import './StatsBar.css';
 
-const stats = [
-  { icon: <FiTruck />, value: '+500', label: 'Voitures disponibles' },
-  { icon: <FiShield />, value: 'Garantie', label: 'Voitures vérifiées' },
-  { icon: <FiDollarSign />, value: 'Meilleurs prix', label: 'Prix compétitifs' },
-  { icon: <FiHeadphones />, value: 'Support 7/7', label: 'À votre écoute' }
-];
-
 const StatsBar = () => {
+  const { t } = useLanguage();
+  const stats = [
+    { icon: <FiTruck />, value: '+500', label: t('stats.available') },
+    { icon: <FiShield />, value: t('stats.warranty'), label: t('stats.verified') },
+    { icon: <FiDollarSign />, value: t('stats.bestPrices'), label: t('stats.competitive') },
+    { icon: <FiHeadphones />, value: t('stats.support'), label: t('stats.listening') }
+  ];
+
   return (
     <div className="stats-bar" id="stats-bar">
       <div className="container stats-grid">

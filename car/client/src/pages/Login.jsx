@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiLock, FiMail } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import './Login.css';
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,7 +23,7 @@ const Login = () => {
       await login(email, password);
       navigate('/admin');
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur de connexion');
+      setError(err.response?.data?.message || t('login.error'));
     } finally {
       setLoading(false);
     }
@@ -35,15 +37,15 @@ const Login = () => {
             <span className="logo-auto">Auto</span>
             <span className="logo-smart">Smart</span>
           </div>
-          <h1 className="login-title">Connexion Admin</h1>
-          <p className="login-subtitle">Accédez au tableau de bord</p>
+          <h1 className="login-title">{t('login.title')}</h1>
+          <p className="login-subtitle">{t('login.subtitle')}</p>
         </div>
 
         {error && <div className="login-error">{error}</div>}
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Email</label>
+            <label className="form-label">{t('contact.email')}</label>
             <div className="login-input-wrapper">
               <FiMail className="login-input-icon" />
               <input
@@ -58,7 +60,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Mot de passe</label>
+            <label className="form-label">{t('login.password')}</label>
             <div className="login-input-wrapper">
               <FiLock className="login-input-icon" />
               <input
@@ -78,7 +80,7 @@ const Login = () => {
             style={{ width: '100%' }}
             disabled={loading}
           >
-            {loading ? 'Connexion...' : 'Se connecter'}
+            {loading ? t('login.loading') : t('login.submit')}
           </button>
         </form>
       </div>

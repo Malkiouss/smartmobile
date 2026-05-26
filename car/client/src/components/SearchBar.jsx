@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
+import { useLanguage } from '../context/LanguageContext';
 import './SearchBar.css';
 
 const brands = ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche', 'Land Rover', 'Volkswagen', 'Toyota', 'Honda'];
@@ -8,6 +9,7 @@ const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i)
 
 const SearchBar = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [filters, setFilters] = useState({
     brand: '',
     model: '',
@@ -32,9 +34,9 @@ const SearchBar = () => {
     <div className="search-bar-wrapper" id="search-bar">
       <form className="search-bar container" onSubmit={handleSearch}>
         <div className="search-field">
-          <label className="search-label">Marque</label>
+          <label className="search-label">{t('search.brand')}</label>
           <select name="brand" value={filters.brand} onChange={handleChange} className="search-select">
-            <option value="">Toutes les marques</option>
+            <option value="">{t('search.allBrands')}</option>
             {brands.map((b) => (
               <option key={b} value={b}>{b}</option>
             ))}
@@ -44,13 +46,13 @@ const SearchBar = () => {
         <div className="search-divider" />
 
         <div className="search-field">
-          <label className="search-label">Modèle</label>
+          <label className="search-label">{t('search.model')}</label>
           <input
             type="text"
             name="model"
             value={filters.model}
             onChange={handleChange}
-            placeholder="Tous les modèles"
+            placeholder={t('search.allModels')}
             className="search-input"
           />
         </div>
@@ -58,13 +60,13 @@ const SearchBar = () => {
         <div className="search-divider" />
 
         <div className="search-field">
-          <label className="search-label">Prix max</label>
+          <label className="search-label">{t('search.maxPrice')}</label>
           <input
             type="number"
             name="maxPrice"
             value={filters.maxPrice}
             onChange={handleChange}
-            placeholder="Prix maximum"
+            placeholder={t('search.maxPricePlaceholder')}
             className="search-input"
           />
         </div>
@@ -72,9 +74,9 @@ const SearchBar = () => {
         <div className="search-divider" />
 
         <div className="search-field">
-          <label className="search-label">Année min</label>
+          <label className="search-label">{t('search.minYear')}</label>
           <select name="minYear" value={filters.minYear} onChange={handleChange} className="search-select">
-            <option value="">Année minimum</option>
+            <option value="">{t('search.minYearPlaceholder')}</option>
             {years.map((y) => (
               <option key={y} value={y}>{y}</option>
             ))}
@@ -83,7 +85,7 @@ const SearchBar = () => {
 
         <button type="submit" className="btn btn-primary search-btn" id="search-btn">
           <FiSearch size={18} />
-          <span>Rechercher</span>
+          <span>{t('search.submit')}</span>
         </button>
       </form>
     </div>

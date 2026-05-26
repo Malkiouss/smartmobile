@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { FiArrowLeft, FiUpload } from 'react-icons/fi';
+import { FiArrowLeft } from 'react-icons/fi';
+import ImageUploadManager from '../../components/ImageUploadManager';
+import { useLanguage } from '../../context/LanguageContext';
 import api from '../../services/api';
 import { getCarImages } from '../../services/images';
 import { unwrapData } from '../../services/response';
@@ -9,15 +11,23 @@ import './AddCar.css';
 const EditCar = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
-  const [imagePreviews, setImagePreviews] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [form, setForm] = useState({
-    name: '', brand: '', model: '', year: '', mileage: '',
-    price: '', description: '', shortDescription: '', quantity: '1', status: 'available'
+    name: '',
+    brand: '',
+    model: '',
+    year: '',
+    mileage: '',
+    price: '',
+    description: '',
+    shortDescription: '',
+    quantity: '1',
+    status: 'available'
   });
 
   useEffect(() => { fetchCar(); }, [id]);
@@ -27,26 +37,26 @@ const EditCar = () => {
       const res = await api.get(`/cars/${id}`);
       const car = unwrapData(res.data);
       setForm({
-        name: car.name || '', brand: car.brand || '', model: car.model || '',
-        year: car.year || '', mileage: car.mileage || '', price: car.price || '',
-        description: car.description || '', shortDescription: car.shortDescription || '',
-        quantity: car.quantity || 1, status: car.status || 'available'
+        name: car.name || '',
+        brand: car.brand || '',
+        model: car.model || '',
+        year: car.year || '',
+        mileage: car.mileage || '',
+        price: car.price || '',
+        description: car.description || '',
+        shortDescription: car.shortDescription || '',
+        quantity: car.quantity || 1,
+        status: car.status || 'available'
       });
       setExistingImages(getCarImages(car, ''));
     } catch (err) {
-      setError('Voiture introuvable');
+      setError(t('admin.notFound'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImageFiles(files);
-    setImagePreviews(files.map(f => URL.createObjectURL(f)));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +70,7 @@ const EditCar = () => {
       await api.put(`/cars/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       navigate('/admin');
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de la mise à jour');
+      setError(err.response?.data?.message || t('admin.updateError'));
     } finally {
       setSaving(false);
     }
@@ -71,80 +81,82 @@ const EditCar = () => {
   return (
     <div className="add-car-page" id="edit-car-page">
       <div className="container">
-        <Link to="/admin" className="car-details-back"><FiArrowLeft /> Retour au dashboard</Link>
+        <Link to="/admin" className="car-details-back"><FiArrowLeft /> {t('admin.backDashboard')}</Link>
         <div className="add-car-card">
-          <h1 className="add-car-title">Modifier la voiture</h1>
+          <h1 className="add-car-title">{t('admin.editCar')}</h1>
           {error && <div className="login-error">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="add-car-grid">
               <div className="form-group">
-                <label className="form-label">Nom *</label>
+                <label className="form-label">{t('admin.name')} *</label>
                 <input type="text" name="name" value={form.name} onChange={handleChange} className="form-input" required />
               </div>
               <div className="form-group">
-                <label className="form-label">Marque *</label>
+                <label className="form-label">{t('admin.brand')} *</label>
                 <input type="text" name="brand" value={form.brand} onChange={handleChange} className="form-input" required />
               </div>
               <div className="form-group">
-                <label className="form-label">Modèle *</label>
+                <label className="form-label">{t('admin.model')} *</label>
                 <input type="text" name="model" value={form.model} onChange={handleChange} className="form-input" required />
               </div>
               <div className="form-group">
-                <label className="form-label">Année *</label>
+                <label className="form-label">{t('admin.year')} *</label>
                 <input type="number" name="year" value={form.year} onChange={handleChange} className="form-input" required />
               </div>
               <div className="form-group">
-                <label className="form-label">Kilométrage</label>
+                <label className="form-label">{t('admin.mileage')}</label>
                 <input type="number" name="mileage" value={form.mileage} onChange={handleChange} className="form-input" />
               </div>
               <div className="form-group">
-                <label className="form-label">Prix (DH) *</label>
+                <label className="form-label">{t('admin.price')} *</label>
                 <input type="number" name="price" value={form.price} onChange={handleChange} className="form-input" required />
               </div>
               <div className="form-group">
-                <label className="form-label">Quantité</label>
+                <label className="form-label">{t('admin.quantity')}</label>
                 <input type="number" name="quantity" value={form.quantity} onChange={handleChange} className="form-input" />
               </div>
               <div className="form-group">
-                <label className="form-label">Statut</label>
+                <label className="form-label">{t('admin.status')}</label>
                 <select name="status" value={form.status} onChange={handleChange} className="form-select">
-                  <option value="available">Disponible</option>
-                  <option value="sold">Vendu</option>
+                  <option value="available">{t('car.available')}</option>
+                  <option value="sold">{t('car.sold')}</option>
                 </select>
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Description courte</label>
+              <label className="form-label">{t('admin.shortDescription')}</label>
               <input type="text" name="shortDescription" value={form.shortDescription} onChange={handleChange} className="form-input" />
             </div>
             <div className="form-group">
-              <label className="form-label">Description</label>
+              <label className="form-label">{t('admin.description')}</label>
               <textarea name="description" value={form.description} onChange={handleChange} className="form-textarea" rows="5"></textarea>
             </div>
             <div className="form-group">
-              <label className="form-label">Images actuelles</label>
+              <label className="form-label">{t('admin.currentImages')}</label>
               {existingImages.length > 0 ? (
                 <div className="add-car-previews">
-                  {existingImages.map((src, i) => <img key={i} src={src} alt={`Current ${i}`} className="add-car-preview-img" />)}
+                  {existingImages.map((src, i) => (
+                    <img
+                      key={src || i}
+                      src={src}
+                      alt={t('upload.currentAlt').replace('{{number}}', i + 1)}
+                      className="add-car-preview-img"
+                    />
+                  ))}
                 </div>
-              ) : <p style={{fontSize:'0.9rem',color:'var(--text-muted)'}}>Aucune image</p>}
+              ) : <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{t('admin.noImage')}</p>}
             </div>
             <div className="form-group">
-              <label className="form-label">Nouvelles images (remplacent les actuelles)</label>
-              <div className="add-car-upload">
-                <input type="file" multiple accept="image/jpeg,image/jpg,image/png,image/webp" onChange={handleImageChange} className="add-car-file-input" id="edit-car-images" />
-                <label htmlFor="edit-car-images" className="add-car-upload-label">
-                  <FiUpload size={24} /><span>Cliquez pour remplacer les photos</span>
-                </label>
-              </div>
-              {imagePreviews.length > 0 && (
-                <div className="add-car-previews">
-                  {imagePreviews.map((src, i) => <img key={i} src={src} alt={`New ${i}`} className="add-car-preview-img" />)}
-                </div>
-              )}
+              <label className="form-label">{t('admin.newImages')}</label>
+              <ImageUploadManager
+                inputId="edit-car-images"
+                imageFiles={imageFiles}
+                setImageFiles={setImageFiles}
+                uploadText={t('upload.clickReplace')}
+              />
             </div>
-            <button type="submit" className="btn btn-primary btn-lg" style={{width:'100%'}} disabled={saving}>
-              {saving ? 'Mise à jour...' : 'Mettre à jour'}
+            <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={saving}>
+              {saving ? t('admin.updating') : t('admin.update')}
             </button>
           </form>
         </div>

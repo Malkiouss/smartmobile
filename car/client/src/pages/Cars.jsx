@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import CarCard from '../components/CarCard';
+import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
 import './Cars.css';
@@ -11,6 +12,7 @@ const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i)
 
 const Cars = () => {
   const [searchParams] = useSearchParams();
+  const { t } = useLanguage();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -26,7 +28,6 @@ const Cars = () => {
   }, []);
 
   useEffect(() => {
-    /* Auto-fetch when coming from search bar with params */
     const brand = searchParams.get('brand');
     if (brand) {
       setFilters(prev => ({ ...prev, brand }));
@@ -67,86 +68,82 @@ const Cars = () => {
   };
 
   const hasActiveFilters = Object.values(filters).some(v => v !== '');
+  const countLabel = cars.length === 1 ? t('cars.countOne') : t('cars.countMany').replace('{{count}}', cars.length);
 
   return (
     <div className="cars-page" id="cars-page">
       <div className="cars-hero">
         <div className="container">
-          <h1 className="cars-hero-title">Nos Voitures</h1>
-          <p className="cars-hero-subtitle">
-            Découvrez notre sélection de véhicules de luxe disponibles au Maroc
-          </p>
+          <h1 className="cars-hero-title">{t('cars.title')}</h1>
+          <p className="cars-hero-subtitle">{t('cars.subtitle')}</p>
         </div>
       </div>
 
       <div className="container cars-layout">
-        {/* Filter Toggle Mobile */}
         <button className="cars-filter-toggle" onClick={() => setShowFilters(!showFilters)}>
-          <FiFilter /> Filtres {hasActiveFilters && <span className="filter-dot" />}
+          <FiFilter /> {t('cars.filters')} {hasActiveFilters && <span className="filter-dot" />}
         </button>
 
         <aside className={`cars-sidebar ${showFilters ? 'open' : ''}`}>
           <div className="sidebar-header">
-            <h3 className="sidebar-title"><FiFilter /> Filtres</h3>
+            <h3 className="sidebar-title"><FiFilter /> {t('cars.filters')}</h3>
             {hasActiveFilters && (
               <button className="sidebar-clear" onClick={clearFilters}>
-                <FiX /> Effacer
+                <FiX /> {t('cars.clear')}
               </button>
             )}
           </div>
 
           <form onSubmit={handleApplyFilters}>
             <div className="form-group">
-              <label className="form-label">Marque</label>
+              <label className="form-label">{t('search.brand')}</label>
               <select name="brand" value={filters.brand} onChange={handleFilterChange} className="form-select">
-                <option value="">Toutes les marques</option>
+                <option value="">{t('search.allBrands')}</option>
                 {brands.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Modèle</label>
+              <label className="form-label">{t('search.model')}</label>
               <input
                 type="text"
                 name="model"
                 value={filters.model}
                 onChange={handleFilterChange}
-                placeholder="Ex: M5, C63..."
+                placeholder={t('cars.modelPlaceholder')}
                 className="form-input"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Prix max (DH)</label>
+              <label className="form-label">{t('cars.maxPriceDh')}</label>
               <input
                 type="number"
                 name="maxPrice"
                 value={filters.maxPrice}
                 onChange={handleFilterChange}
-                placeholder="Ex: 1500000"
+                placeholder={t('cars.pricePlaceholder')}
                 className="form-input"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Année minimum</label>
+              <label className="form-label">{t('search.minYearPlaceholder')}</label>
               <select name="minYear" value={filters.minYear} onChange={handleFilterChange} className="form-select">
-                <option value="">Toutes les années</option>
+                <option value="">{t('cars.allYears')}</option>
                 {years.map(y => <option key={y} value={y}>{y}</option>)}
               </select>
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-              <FiSearch /> Rechercher
+              <FiSearch /> {t('search.submit')}
             </button>
           </form>
         </aside>
 
         <main className="cars-main">
           <div className="cars-top-bar">
-            <p className="cars-count">
-              {loading ? '...' : `${cars.length} voiture${cars.length !== 1 ? 's' : ''} trouvée${cars.length !== 1 ? 's' : ''}`}
-            </p>
+            <p className="cars-count">{loading ? '...' : countLabel}</p>
           </div>
 
           {loading ? (
@@ -158,9 +155,9 @@ const Cars = () => {
               ))}
               {cars.length === 0 && (
                 <div className="cars-empty">
-                  <p>Aucune voiture ne correspond à vos critères.</p>
+                  <p>{t('cars.empty')}</p>
                   <button className="btn btn-outline" onClick={clearFilters}>
-                    Effacer les filtres
+                    {t('cars.clearFilters')}
                   </button>
                 </div>
               )}

@@ -1,13 +1,25 @@
 import { FiCamera, FiCheckCircle } from 'react-icons/fi';
+import { useLanguage } from '../context/LanguageContext';
 import './SellCar.css';
 
 const SellCar = () => {
+  const { t } = useLanguage();
+
+  const benefits = [
+    t('sell.freePost'),
+    t('sell.visibility'),
+    t('sell.professionalEvaluation'),
+    t('sell.personalSupport'),
+    t('sell.secureTransaction'),
+    t('sell.fastSale'),
+  ];
+
   return (
     <div className="sell-page" id="sell-page">
       <div className="sell-hero">
         <div className="container">
-          <h1 className="sell-hero-title">Vendre ma voiture</h1>
-          <p className="sell-hero-subtitle">Publiez votre annonce gratuitement et vendez rapidement</p>
+          <h1 className="sell-hero-title">{t('sell.title')}</h1>
+          <p className="sell-hero-subtitle">{t('sell.subtitle')}</p>
         </div>
       </div>
 
@@ -15,76 +27,71 @@ const SellCar = () => {
         <div className="sell-steps">
           <div className="sell-step">
             <div className="sell-step-number">1</div>
-            <h3>Contactez-nous</h3>
-            <p>Envoyez-nous les détails de votre voiture via WhatsApp ou email</p>
+            <h3>{t('sell.step1.title')}</h3>
+            <p>{t('sell.step1.desc')}</p>
           </div>
           <div className="sell-step">
             <div className="sell-step-number">2</div>
-            <h3>Évaluation gratuite</h3>
-            <p>Nos experts évaluent votre véhicule et proposent un prix juste</p>
+            <h3>{t('sell.step2.title')}</h3>
+            <p>{t('sell.step2.desc')}</p>
           </div>
           <div className="sell-step">
             <div className="sell-step-number">3</div>
-            <h3>Vente rapide</h3>
-            <p>Votre voiture est publiée et vendue en un temps record</p>
+            <h3>{t('sell.step3.title')}</h3>
+            <p>{t('sell.step3.desc')}</p>
           </div>
         </div>
 
         <div className="sell-form-section">
           <div className="sell-form-card">
             <h2 className="sell-form-title">
-              <FiCamera /> Soumettez votre voiture
+              <FiCamera /> {t('sell.formTitle')}
             </h2>
-            <p className="sell-form-desc">
-              Remplissez les informations ci-dessous et nous vous contacterons dans les 24h.
-            </p>
+            <p className="sell-form-desc">{t('sell.formDesc')}</p>
 
             <form className="sell-form" onSubmit={(e) => e.preventDefault()}>
               <div className="sell-form-grid">
                 <div className="form-group">
-                  <label className="form-label">Nom complet</label>
-                  <input type="text" className="form-input" placeholder="Votre nom" />
+                  <label className="form-label">{t('sell.fullName')}</label>
+                  <input type="text" className="form-input" placeholder={t('contact.namePlaceholder')} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Téléphone</label>
+                  <label className="form-label">{t('sell.phone')}</label>
                   <input type="tel" className="form-input" placeholder="+212 XXX XXX XXX" />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Marque</label>
-                  <input type="text" className="form-input" placeholder="Ex: BMW, Mercedes..." />
+                  <label className="form-label">{t('search.brand')}</label>
+                  <input type="text" className="form-input" placeholder={t('admin.placeholderBrand')} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Modèle</label>
-                  <input type="text" className="form-input" placeholder="Ex: M5, C63..." />
+                  <label className="form-label">{t('search.model')}</label>
+                  <input type="text" className="form-input" placeholder={t('admin.placeholderModel')} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Année</label>
-                  <input type="number" className="form-input" placeholder="Ex: 2021" />
+                  <label className="form-label">{t('details.year')}</label>
+                  <input type="number" className="form-input" placeholder={t('admin.placeholderYear')} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Prix souhaité (DH)</label>
-                  <input type="number" className="form-input" placeholder="Ex: 500000" />
+                  <label className="form-label">{t('sell.desiredPrice')}</label>
+                  <input type="number" className="form-input" placeholder={t('sell.desiredPricePlaceholder')} />
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label">Description</label>
-                <textarea className="form-textarea" placeholder="Décrivez votre voiture (kilométrage, état, options...)" rows="4"></textarea>
+                <label className="form-label">{t('details.description')}</label>
+                <textarea className="form-textarea" placeholder={t('sell.descriptionPlaceholder')} rows="4"></textarea>
               </div>
               <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-                Envoyer ma demande
+                {t('sell.submit')}
               </button>
             </form>
           </div>
 
           <div className="sell-benefits">
-            <h3>Pourquoi vendre avec AutoSmart ?</h3>
+            <h3>{t('sell.whyTitle')}</h3>
             <ul>
-              <li><FiCheckCircle className="benefit-icon" /> Publication gratuite</li>
-              <li><FiCheckCircle className="benefit-icon" /> Visibilité maximale</li>
-              <li><FiCheckCircle className="benefit-icon" /> Évaluation professionnelle</li>
-              <li><FiCheckCircle className="benefit-icon" /> Accompagnement personnalisé</li>
-              <li><FiCheckCircle className="benefit-icon" /> Transaction sécurisée</li>
-              <li><FiCheckCircle className="benefit-icon" /> Vente rapide garantie</li>
+              {benefits.map((benefit) => (
+                <li key={benefit}><FiCheckCircle className="benefit-icon" /> {benefit}</li>
+              ))}
             </ul>
           </div>
         </div>
