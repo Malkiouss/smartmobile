@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { FiArrowLeft } from 'react-icons/fi';
 import ImageUploadManager from '../../components/ImageUploadManager';
 import { useLanguage } from '../../context/LanguageContext';
 import api from '../../services/api';
 import { getCarImages } from '../../services/images';
 import { unwrapData } from '../../services/response';
+import { fadeUp, staggerContainer } from '../../utils/animations';
 import './AddCar.css';
 
 const EditCar = () => {
@@ -81,12 +83,14 @@ const EditCar = () => {
   return (
     <div className="add-car-page" id="edit-car-page">
       <div className="container">
-        <Link to="/admin" className="car-details-back"><FiArrowLeft /> {t('admin.backDashboard')}</Link>
-        <div className="add-car-card">
+        <motion.div variants={fadeUp} initial="hidden" animate="visible">
+          <Link to="/admin" className="car-details-back"><FiArrowLeft /> {t('admin.backDashboard')}</Link>
+        </motion.div>
+        <motion.div className="add-car-card" variants={fadeUp} initial="hidden" animate="visible">
           <h1 className="add-car-title">{t('admin.editCar')}</h1>
           {error && <div className="login-error">{error}</div>}
           <form onSubmit={handleSubmit}>
-            <div className="add-car-grid">
+            <motion.div className="add-car-grid" variants={staggerContainer} initial="hidden" animate="visible">
               <div className="form-group">
                 <label className="form-label">{t('admin.name')} *</label>
                 <input type="text" name="name" value={form.name} onChange={handleChange} className="form-input" required />
@@ -122,7 +126,7 @@ const EditCar = () => {
                   <option value="sold">{t('car.sold')}</option>
                 </select>
               </div>
-            </div>
+            </motion.div>
             <div className="form-group">
               <label className="form-label">{t('admin.shortDescription')}</label>
               <input type="text" name="shortDescription" value={form.shortDescription} onChange={handleChange} className="form-input" />
@@ -159,7 +163,7 @@ const EditCar = () => {
               {saving ? t('admin.updating') : t('admin.update')}
             </button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

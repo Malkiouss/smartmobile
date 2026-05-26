@@ -1,5 +1,6 @@
 import { FaWhatsapp } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
+import api from '../services/api';
 
 const WHATSAPP_NUMBER = '212707852423';
 
@@ -9,10 +10,11 @@ const WhatsAppButton = ({
   disabled = false,
   className = '',
   floating = false,
+  carId,
 }) => {
   const { language, t } = useLanguage();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (disabled) return;
 
     const message = encodeURIComponent(carName && price
@@ -20,7 +22,17 @@ const WhatsAppButton = ({
       : t('home.contactDesc')
     );
 
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+    if (carId) {
+      try {
+        await api.patch(`/cars/${carId}/whatsapp-click`);
+      } catch (error) {
+        console.error('Error tracking WhatsApp click:', error);
+      }
+    }
+
+    window.open(whatsappUrl, '_blank');
   };
 
   if (floating) {

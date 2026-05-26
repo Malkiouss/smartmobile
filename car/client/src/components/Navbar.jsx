@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { FiGlobe, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { languages, useLanguage } from '../context/LanguageContext';
 import logo from '../assets/logo.png';
+import { fadeIn } from '../utils/animations';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -59,7 +61,13 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="navbar" id="main-navbar">
+    <motion.nav
+      className="navbar"
+      id="main-navbar"
+      variants={fadeIn}
+      initial="hidden"
+      animate="visible"
+    >
       <div className="container navbar-inner">
         <Link to="/" className="navbar-logo" id="navbar-logo">
           <img src={logo} alt="AutoSmart Maroc" className="navbar-logo-img" />
@@ -146,7 +154,7 @@ const Navbar = () => {
           aria-hidden="true"
         />
       )}
-    </nav>
+    </motion.nav>
   );
 };
 

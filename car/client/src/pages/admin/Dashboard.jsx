@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiEdit2, FiTrash2, FiToggleLeft, FiToggleRight, FiPackage } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { FiPlus, FiEdit2, FiTrash2, FiToggleLeft, FiToggleRight, FiPackage, FiBarChart2 } from 'react-icons/fi';
 import api from '../../services/api';
 import { getCarImages } from '../../services/images';
 import { unwrapArray, unwrapData } from '../../services/response';
 import { useLanguage } from '../../context/LanguageContext';
+import { fadeUp, staggerContainer, viewportOnce } from '../../utils/animations';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -51,44 +53,49 @@ const Dashboard = () => {
   return (
     <div className="dashboard" id="admin-dashboard">
       <div className="container">
-        <div className="dashboard-header">
+        <motion.div className="dashboard-header" variants={fadeUp} initial="hidden" animate="visible">
           <div>
             <h1 className="dashboard-title">{t('admin.title')}</h1>
             <p className="dashboard-subtitle">{t('admin.subtitle')}</p>
           </div>
-          <Link to="/admin/add" className="btn btn-primary" id="add-car-btn">
-            <FiPlus /> {t('admin.addCar')}
-          </Link>
-        </div>
+          <div className="dashboard-header-actions">
+            <Link to="/admin/analytics" className="btn btn-outline" id="analytics-dashboard-btn">
+              <FiBarChart2 /> Analytics Dashboard
+            </Link>
+            <Link to="/admin/add" className="btn btn-primary" id="add-car-btn">
+              <FiPlus /> {t('admin.addCar')}
+            </Link>
+          </div>
+        </motion.div>
 
-        <div className="dashboard-stats">
-          <div className="dashboard-stat-card">
+        <motion.div className="dashboard-stats" variants={staggerContainer} initial="hidden" animate="visible">
+          <motion.div className="dashboard-stat-card" variants={fadeUp} whileHover={{ y: -5 }}>
             <FiPackage className="dashboard-stat-icon" />
             <div>
               <span className="dashboard-stat-value">{cars.length}</span>
               <span className="dashboard-stat-label">{t('admin.totalCars')}</span>
             </div>
-          </div>
-          <div className="dashboard-stat-card">
+          </motion.div>
+          <motion.div className="dashboard-stat-card" variants={fadeUp} whileHover={{ y: -5 }}>
             <FiToggleRight className="dashboard-stat-icon success" />
             <div>
               <span className="dashboard-stat-value">{cars.filter(c => c.status === 'available').length}</span>
               <span className="dashboard-stat-label">{t('admin.availableCars')}</span>
             </div>
-          </div>
-          <div className="dashboard-stat-card">
+          </motion.div>
+          <motion.div className="dashboard-stat-card" variants={fadeUp} whileHover={{ y: -5 }}>
             <FiToggleLeft className="dashboard-stat-icon danger" />
             <div>
               <span className="dashboard-stat-value">{cars.filter(c => c.status === 'sold').length}</span>
               <span className="dashboard-stat-label">{t('admin.soldCars')}</span>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {loading ? (
           <div className="spinner" />
         ) : (
-          <div className="dashboard-table-wrapper">
+          <motion.div className="dashboard-table-wrapper" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <table className="dashboard-table">
               <thead>
                 <tr>
@@ -158,7 +165,7 @@ const Dashboard = () => {
                 )}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

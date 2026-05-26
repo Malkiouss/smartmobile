@@ -12,6 +12,10 @@ const defaultAllowedOrigins = [
   'https://smartmobile-client.vercel.app',
   'https://www.autosmartmaroc.com',
   'https://autosmartmaroc.com',
+  'https://autosmart.github.io',
+  'https://autosmartmaroc.ma',
+  'https://www.autosmartmaroc.ma',
+  'http://localhost:3000',
   'http://localhost:5173',
   'http://127.0.0.1:5173'
 ];
@@ -31,17 +35,16 @@ const allowedOrigins = [
   .filter(Boolean)
 ].filter((origin, index, origins) => origins.indexOf(origin) === index);
 const getAllowedOrigin = (origin) => {
-  if (origin && allowedOrigins.includes(normalizeOrigin(origin))) {
-    return normalizeOrigin(origin);
-  }
-
-  return null;
+  if (!origin) return null;
+  return normalizeOrigin(origin);
 };
 const setCorsHeaders = (req, res) => {
   const allowedOrigin = getAllowedOrigin(req.headers && req.headers.origin);
 
   if (allowedOrigin) {
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
   res.setHeader('Vary', 'Origin');
@@ -51,11 +54,7 @@ const setCorsHeaders = (req, res) => {
 };
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
-      return callback(null, true);
-    }
-
-    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -101,7 +100,9 @@ apiRouter.get('/health/db', ensureDB, (req, res) => {
 apiRouter.use(ensureDB);
 apiRouter.use('/cars', require('./routes/cars'));
 apiRouter.use('/auth', require('./routes/auth'));
+apiRouter.use('/admin', require('./routes/admin'));
 
+app.use('/api/admin', ensureDB, require('./routes/admin'));
 app.use('/api', apiRouter);
 app.use('/', apiRouter);
 

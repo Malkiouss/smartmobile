@@ -205,7 +205,8 @@
 @media (max-width: 968px) {
   .hero {
     min-height: auto;
-  
+    width: 100%;
+    margin: 0;
   }
 
   .hero-blur-wave,
@@ -219,11 +220,16 @@
     text-align: center;
     padding-top: 48px;
     padding-bottom: 36px;
+    padding-left: 0;
+    padding-right: 0;
     gap: 32px;
+    max-width: 100%;
   }
 
   .hero-text {
     max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .hero-subtitle {
@@ -241,15 +247,25 @@
   }
 
   .hero-image-wrap {
-    max-width: 420px;
+    max-width: 100%;
+    width: 100%;
     justify-content: center;
     min-height: auto;
+    overflow: hidden;
+  }
+
+  .hero-image {
+    width: 100%;
+    overflow: hidden;
   }
 
   .hero-car-img {
     -webkit-mask-image: none;
     mask-image: none;
-    width: 24rem;
+    width: 100%;
+    max-width: 520px;
+    object-fit: cover;
+    object-position: center;
   }
 }
 
@@ -284,5 +300,14 @@
   .hero-image-wrap {
     max-width: 100%;
     width: 100%;
+  }
+
+  .hero-car-img {
+    width: 100vw;
+    max-width: 92vw;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 25px;
   }
 }

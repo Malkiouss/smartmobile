@@ -8,7 +8,10 @@ const {
   createCar,
   updateCar,
   deleteCar,
-  updateCarStatus
+  updateCarStatus,
+  incrementCarView,
+  incrementCarLike,
+  incrementWhatsappClick
 } = require('../controllers/carController');
 
 const uploadImages = upload.array('images', 10);
@@ -25,6 +28,9 @@ const runUpload = (req, res, next) => {
 
 router.get('/', getCars);
 router.get('/:id', getCar);
+router.patch('/:id/view', incrementCarView);
+router.patch('/:id/like', incrementCarLike);
+router.patch('/:id/whatsapp-click', incrementWhatsappClick);
 router.post('/', protect, runUpload, createCar);
 router.put('/:id', protect, runUpload, updateCar);
 router.delete('/:id', protect, deleteCar);

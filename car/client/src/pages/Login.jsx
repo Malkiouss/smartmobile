@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { FiLock, FiMail } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { fadeUp } from '../utils/animations';
 import './Login.css';
 
 const Login = () => {
@@ -31,7 +33,7 @@ const Login = () => {
 
   return (
     <div className="login-page" id="login-page">
-      <div className="login-card">
+      <motion.div className="login-card" variants={fadeUp} initial="hidden" animate="visible">
         <div className="login-header">
           <div className="login-logo">
             <span className="logo-auto">Auto</span>
@@ -83,7 +85,7 @@ const Login = () => {
             {loading ? t('login.loading') : t('login.submit')}
           </button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

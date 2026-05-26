@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion';
 import { FiMapPin, FiPhone, FiMail, FiClock } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
+import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Contact.css';
 
 const Contact = () => {
@@ -7,16 +9,16 @@ const Contact = () => {
 
   return (
     <div className="contact-page" id="contact-page">
-      <div className="contact-hero">
+      <motion.div className="contact-hero" variants={staggerContainer} initial="hidden" animate="visible">
         <div className="container">
-          <h1 className="contact-hero-title">{t('contact.title')}</h1>
-          <p className="contact-hero-subtitle">{t('contact.subtitle')}</p>
+          <motion.h1 className="contact-hero-title" variants={fadeUp}>{t('contact.title')}</motion.h1>
+          <motion.p className="contact-hero-subtitle" variants={fadeUp}>{t('contact.subtitle')}</motion.p>
         </div>
-      </div>
+      </motion.div>
 
       <div className="container contact-content">
-        <div className="contact-grid">
-          <div className="contact-form-card">
+        <motion.div className="contact-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+          <motion.div className="contact-form-card" variants={fadeUp}>
             <h2>{t('contact.formTitle')}</h2>
             <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
               <div className="contact-form-row">
@@ -41,40 +43,40 @@ const Contact = () => {
                 {t('contact.send')}
               </button>
             </form>
-          </div>
+          </motion.div>
 
-          <div className="contact-info">
-            <div className="contact-info-card">
+          <motion.div className="contact-info" variants={staggerContainer}>
+            <motion.div className="contact-info-card" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
               <div className="contact-info-icon"><FiMapPin /></div>
               <div>
                 <h3>{t('contact.address')}</h3>
                 <p>{t('contact.addressValue')}</p>
               </div>
-            </div>
-            <div className="contact-info-card">
+            </motion.div>
+            <motion.div className="contact-info-card" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
               <div className="contact-info-icon"><FiPhone /></div>
               <div>
                 <h3>{t('contact.phone')}</h3>
                 <p>+212 707-852423</p>
               </div>
-            </div>
-            <div className="contact-info-card">
+            </motion.div>
+            <motion.div className="contact-info-card" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
               <div className="contact-info-icon"><FiMail /></div>
               <div>
                 <h3>{t('contact.email')}</h3>
                 <p>amamoucharaf27@gmail.com</p>
               </div>
-            </div>
-            <div className="contact-info-card">
+            </motion.div>
+            <motion.div className="contact-info-card" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
               <div className="contact-info-icon"><FiClock /></div>
               <div>
                 <h3>{t('contact.hours')}</h3>
                 <p>{t('contact.weekdays')}</p>
                 <p>{t('contact.sunday')}</p>
               </div>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

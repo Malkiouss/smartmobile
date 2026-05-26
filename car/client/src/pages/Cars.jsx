@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
+import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Cars.css';
 
 const brands = ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche', 'Land Rover', 'Volkswagen', 'Toyota', 'Honda'];
@@ -72,19 +74,30 @@ const Cars = () => {
 
   return (
     <div className="cars-page" id="cars-page">
-      <div className="cars-hero">
+      <motion.div
+        className="cars-hero"
+        initial="hidden"
+        animate="visible"
+        variants={staggerContainer}
+      >
         <div className="container">
-          <h1 className="cars-hero-title">{t('cars.title')}</h1>
-          <p className="cars-hero-subtitle">{t('cars.subtitle')}</p>
+          <motion.h1 className="cars-hero-title" variants={fadeUp}>{t('cars.title')}</motion.h1>
+          <motion.p className="cars-hero-subtitle" variants={fadeUp}>{t('cars.subtitle')}</motion.p>
         </div>
-      </div>
+      </motion.div>
 
       <div className="container cars-layout">
         <button className="cars-filter-toggle" onClick={() => setShowFilters(!showFilters)}>
           <FiFilter /> {t('cars.filters')} {hasActiveFilters && <span className="filter-dot" />}
         </button>
 
-        <aside className={`cars-sidebar ${showFilters ? 'open' : ''}`}>
+        <motion.aside
+          className={`cars-sidebar ${showFilters ? 'open' : ''}`}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
           <div className="sidebar-header">
             <h3 className="sidebar-title"><FiFilter /> {t('cars.filters')}</h3>
             {hasActiveFilters && (
@@ -139,7 +152,7 @@ const Cars = () => {
               <FiSearch /> {t('search.submit')}
             </button>
           </form>
-        </aside>
+        </motion.aside>
 
         <main className="cars-main">
           <div className="cars-top-bar">
@@ -149,7 +162,13 @@ const Cars = () => {
           {loading ? (
             <div className="spinner" />
           ) : (
-            <div className="cars-grid">
+            <motion.div
+              className="cars-grid"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               {cars.map((car) => (
                 <CarCard key={car._id} car={car} />
               ))}
@@ -161,7 +180,7 @@ const Cars = () => {
                   </button>
                 </div>
               )}
-            </div>
+            </motion.div>
           )}
         </main>
       </div>

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { FiArrowLeft } from 'react-icons/fi';
 import ImageUploadManager from '../../components/ImageUploadManager';
 import { useLanguage } from '../../context/LanguageContext';
 import api from '../../services/api';
+import { fadeUp, staggerContainer } from '../../utils/animations';
 import './AddCar.css';
 
 const AddCar = () => {
@@ -58,17 +60,19 @@ const AddCar = () => {
   return (
     <div className="add-car-page" id="add-car-page">
       <div className="container">
-        <Link to="/admin" className="car-details-back">
-          <FiArrowLeft /> {t('admin.backDashboard')}
-        </Link>
+        <motion.div variants={fadeUp} initial="hidden" animate="visible">
+          <Link to="/admin" className="car-details-back">
+            <FiArrowLeft /> {t('admin.backDashboard')}
+          </Link>
+        </motion.div>
 
-        <div className="add-car-card">
+        <motion.div className="add-car-card" variants={fadeUp} initial="hidden" animate="visible">
           <h1 className="add-car-title">{t('admin.addCar')}</h1>
 
           {error && <div className="login-error">{error}</div>}
 
           <form onSubmit={handleSubmit}>
-            <div className="add-car-grid">
+            <motion.div className="add-car-grid" variants={staggerContainer} initial="hidden" animate="visible">
               <div className="form-group">
                 <label className="form-label">{t('admin.fullName')} *</label>
                 <input type="text" name="name" value={form.name} onChange={handleChange} className="form-input" placeholder={t('admin.placeholderName')} required />
@@ -104,7 +108,7 @@ const AddCar = () => {
                   <option value="sold">{t('car.sold')}</option>
                 </select>
               </div>
-            </div>
+            </motion.div>
 
             <div className="form-group">
               <label className="form-label">{t('admin.shortDescription')}</label>
@@ -130,7 +134,7 @@ const AddCar = () => {
               {loading ? t('admin.creating') : t('admin.create')}
             </button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

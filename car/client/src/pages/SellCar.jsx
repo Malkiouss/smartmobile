@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion';
 import { FiCamera, FiCheckCircle } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
+import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './SellCar.css';
 
 const SellCar = () => {
@@ -16,34 +18,34 @@ const SellCar = () => {
 
   return (
     <div className="sell-page" id="sell-page">
-      <div className="sell-hero">
+      <motion.div className="sell-hero" variants={staggerContainer} initial="hidden" animate="visible">
         <div className="container">
-          <h1 className="sell-hero-title">{t('sell.title')}</h1>
-          <p className="sell-hero-subtitle">{t('sell.subtitle')}</p>
+          <motion.h1 className="sell-hero-title" variants={fadeUp}>{t('sell.title')}</motion.h1>
+          <motion.p className="sell-hero-subtitle" variants={fadeUp}>{t('sell.subtitle')}</motion.p>
         </div>
-      </div>
+      </motion.div>
 
       <div className="container sell-content">
-        <div className="sell-steps">
-          <div className="sell-step">
+        <motion.div className="sell-steps" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+          <motion.div className="sell-step" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
             <div className="sell-step-number">1</div>
             <h3>{t('sell.step1.title')}</h3>
             <p>{t('sell.step1.desc')}</p>
-          </div>
-          <div className="sell-step">
+          </motion.div>
+          <motion.div className="sell-step" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
             <div className="sell-step-number">2</div>
             <h3>{t('sell.step2.title')}</h3>
             <p>{t('sell.step2.desc')}</p>
-          </div>
-          <div className="sell-step">
+          </motion.div>
+          <motion.div className="sell-step" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
             <div className="sell-step-number">3</div>
             <h3>{t('sell.step3.title')}</h3>
             <p>{t('sell.step3.desc')}</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="sell-form-section">
-          <div className="sell-form-card">
+        <motion.div className="sell-form-section" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+          <motion.div className="sell-form-card" variants={fadeUp}>
             <h2 className="sell-form-title">
               <FiCamera /> {t('sell.formTitle')}
             </h2>
@@ -84,17 +86,17 @@ const SellCar = () => {
                 {t('sell.submit')}
               </button>
             </form>
-          </div>
+          </motion.div>
 
-          <div className="sell-benefits">
+          <motion.div className="sell-benefits" variants={fadeUp}>
             <h3>{t('sell.whyTitle')}</h3>
             <ul>
               {benefits.map((benefit) => (
                 <li key={benefit}><FiCheckCircle className="benefit-icon" /> {benefit}</li>
               ))}
             </ul>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

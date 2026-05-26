@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { FiSearch } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
+import { fadeUp, viewportOnce } from '../utils/animations';
 import './SearchBar.css';
 
 const brands = ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche', 'Land Rover', 'Volkswagen', 'Toyota', 'Honda'];
@@ -32,7 +34,14 @@ const SearchBar = () => {
 
   return (
     <div className="search-bar-wrapper" id="search-bar">
-      <form className="search-bar container" onSubmit={handleSearch}>
+      <motion.form
+        className="search-bar container"
+        onSubmit={handleSearch}
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+      >
         <div className="search-field">
           <label className="search-label">{t('search.brand')}</label>
           <select name="brand" value={filters.brand} onChange={handleChange} className="search-select">
@@ -87,7 +96,7 @@ const SearchBar = () => {
           <FiSearch size={18} />
           <span>{t('search.submit')}</span>
         </button>
-      </form>
+      </motion.form>
     </div>
   );
 };

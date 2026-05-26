@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   FiShield,
   FiDollarSign,
@@ -17,6 +18,7 @@ import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
+import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Home.css';
 
 const WHATSAPP_NUMBER = '212707852423';
@@ -74,7 +76,13 @@ const Home = () => {
 
       <section className="section popular-section home-section-alt" id="popular-cars">
         <div className="container">
-          <div className="popular-header">
+          <motion.div
+            className="popular-header"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <div>
               <h2 className="section-title">{t('home.popularTitle')}</h2>
               <p className="section-subtitle">{t('home.popularSubtitle')}</p>
@@ -82,44 +90,50 @@ const Home = () => {
             <Link to="/voitures" className="popular-view-all">
               {t('home.viewAll')}
             </Link>
-          </div>
+          </motion.div>
 
           {loading ? (
             <div className="spinner" />
           ) : (
-            <div className="popular-grid">
+            <motion.div
+              className="popular-grid"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               {popularCars.map((car) => (
                 <CarCard key={car._id} car={car} />
               ))}
               {popularCars.length === 0 && (
                 <p className="popular-empty">{t('home.emptyCars')}</p>
               )}
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
 
       <section className="section home-why" id="why-choose-us">
         <div className="container">
-          <div className="home-section-header">
+          <motion.div className="home-section-header" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <h2 className="section-title">{t('home.whyTitle')}</h2>
             <p className="section-subtitle">{t('home.whySubtitle')}</p>
-          </div>
-          <div className="home-why-grid">
-            {whyChooseUs.map((item, idx) => (
-              <article className="home-why-card fade-in" key={item.title} style={{ animationDelay: `${idx * 0.08}s` }}>
+          </motion.div>
+          <motion.div className="home-why-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+            {whyChooseUs.map((item) => (
+              <motion.article className="home-why-card" key={item.title} variants={fadeUp} whileHover={{ y: -6, scale: 1.01 }}>
                 <div className="home-why-icon">{item.icon}</div>
                 <h3 className="home-why-title">{item.title}</h3>
                 <p className="home-why-desc">{item.description}</p>
-              </article>
+              </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       <section className="section home-about" id="home-about">
         <div className="container home-about-grid">
-          <div className="home-about-text">
+          <motion.div className="home-about-text" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <span className="home-about-label">{t('home.aboutLabel')}</span>
             <h2 className="section-title">{t('home.aboutTitle')}</h2>
             <p className="home-about-lead">{t('home.aboutLead')}</p>
@@ -144,52 +158,52 @@ const Home = () => {
                 ))}
               </div>
             </div>
-          </div>
-          <div className="home-about-stats">
-            <div className="home-about-stat-card">
+          </motion.div>
+          <motion.div className="home-about-stats" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+            <motion.div className="home-about-stat-card" variants={fadeUp} whileHover={{ y: -3 }}>
               <span className="home-about-stat-value">+500</span>
               <span className="home-about-stat-label">{t('home.listedCars')}</span>
-            </div>
-            <div className="home-about-stat-card">
+            </motion.div>
+            <motion.div className="home-about-stat-card" variants={fadeUp} whileHover={{ y: -3 }}>
               <span className="home-about-stat-value">98%</span>
               <span className="home-about-stat-label">{t('home.satisfiedClients')}</span>
-            </div>
-            <div className="home-about-stat-card home-about-stat-card--accent">
+            </motion.div>
+            <motion.div className="home-about-stat-card home-about-stat-card--accent" variants={fadeUp} whileHover={{ y: -3 }}>
               <span className="home-about-stat-value">24/7</span>
               <span className="home-about-stat-label">{t('home.availableSupport')}</span>
-            </div>
-            <div className="home-about-image">
+            </motion.div>
+            <motion.div className="home-about-image" variants={fadeUp}>
               <img
                 src="https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg"
                 alt={t('home.showroomAlt')}
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       <section className="home-sell-cta" id="sell-cta">
         <div className="home-sell-cta-bg" aria-hidden="true" />
         <div className="container home-sell-cta-inner">
-          <div className="home-sell-cta-content">
+          <motion.div className="home-sell-cta-content" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <h2 className="home-sell-cta-title">{t('home.sellTitle')}</h2>
             <p className="home-sell-cta-desc">{t('home.sellDesc')}</p>
             <Link to="/vendre" className="btn btn-white btn-lg">
               {t('home.publishAd')}
             </Link>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       <section className="section home-testimonials" id="testimonials">
         <div className="container">
-          <div className="home-section-header">
+          <motion.div className="home-section-header" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <h2 className="section-title">{t('home.testimonialsTitle')}</h2>
             <p className="section-subtitle">{t('home.testimonialsSubtitle')}</p>
-          </div>
-          <div className="home-testimonials-grid">
+          </motion.div>
+          <motion.div className="home-testimonials-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             {testimonials.map((review) => (
-              <article className="home-testimonial-card" key={review.name}>
+              <motion.article className="home-testimonial-card" key={review.name} variants={fadeUp} whileHover={{ y: -4 }}>
                 <div className="home-testimonial-stars">
                   {Array.from({ length: review.rating }).map((_, i) => (
                     <FiStar key={i} className="home-testimonial-star" />
@@ -203,14 +217,14 @@ const Home = () => {
                     <span className="home-testimonial-location">{review.location}</span>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       <section className="section home-contact-cta" id="contact-cta">
-        <div className="container home-contact-cta-inner">
+        <motion.div className="container home-contact-cta-inner" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <div className="home-contact-cta-text">
             <h2 className="home-contact-cta-title">{t('home.contactTitle')}</h2>
             <p className="home-contact-cta-desc">{t('home.contactDesc')}</p>
@@ -228,7 +242,7 @@ const Home = () => {
               {t('home.contactPage')}
             </Link>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );

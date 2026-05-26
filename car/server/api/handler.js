@@ -4,6 +4,10 @@ const defaultAllowedOrigins = [
   'https://smartmobile-client.vercel.app',
   'https://www.autosmartmaroc.com',
   'https://autosmartmaroc.com',
+  'https://autosmart.github.io',
+  'https://autosmartmaroc.ma',
+  'https://www.autosmartmaroc.ma',
+  'http://localhost:3000',
   'http://localhost:5173',
   'http://127.0.0.1:5173'
 ];
@@ -25,11 +29,8 @@ const allowedOrigins = [
 ].filter((origin, index, origins) => origins.indexOf(origin) === index);
 
 const getAllowedOrigin = (origin) => {
-  if (origin && allowedOrigins.includes(normalizeOrigin(origin))) {
-    return normalizeOrigin(origin);
-  }
-
-  return null;
+  if (!origin) return null;
+  return normalizeOrigin(origin);
 };
 
 const setCorsHeaders = (req, res) => {
@@ -37,6 +38,8 @@ const setCorsHeaders = (req, res) => {
 
   if (allowedOrigin) {
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
   res.setHeader('Vary', 'Origin');

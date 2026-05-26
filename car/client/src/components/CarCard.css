@@ -3,23 +3,25 @@
   border-radius: var(--radius);
   box-shadow: var(--card-shadow);
   overflow: hidden;
-  transition: var(--transition);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  max-width: 100%;
 }
 
 .car-card:hover {
   box-shadow: var(--card-shadow-hover);
-  transform: translateY(-4px);
 }
 
 .car-card--sold {
   opacity: 0.85;
 }
 
-.car-card--sold:hover {
-  transform: none;
+.car-card:focus-visible {
+  outline: 3px solid rgba(26, 109, 255, 0.35);
+  outline-offset: 3px;
 }
 
 /* Sold Badge */
