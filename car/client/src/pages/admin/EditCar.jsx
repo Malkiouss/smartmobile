@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft } from 'react-icons/fi';
 import ImageUploadManager from '../../components/ImageUploadManager';
 import { useLanguage } from '../../context/LanguageContext';
+import { getPopularBrandName, isPopularBrand, popularBrands } from '../../data/brands';
 import api from '../../services/api';
 import { getCarImages } from '../../services/images';
 import { unwrapData } from '../../services/response';
@@ -19,6 +20,7 @@ const EditCar = () => {
   const [error, setError] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [customBrand, setCustomBrand] = useState('');
   const [form, setForm] = useState({
     name: '',
     brand: '',
@@ -38,9 +40,12 @@ const EditCar = () => {
     try {
       const res = await api.get(`/cars/${id}`);
       const car = unwrapData(res.data);
+      const existingBrand = car.brand || car.marque || '';
+      const hasPopularBrand = isPopularBrand(existingBrand);
+      const normalizedPopularBrand = getPopularBrandName(existingBrand);
       setForm({
         name: car.name || '',
-        brand: car.brand || '',
+        brand: hasPopularBrand ? normalizedPopularBrand : 'Other',
         model: car.model || '',
         year: car.year || '',
         mileage: car.mileage || '',
@@ -50,6 +55,7 @@ const EditCar = () => {
         quantity: car.quantity || 1,
         status: car.status || 'available'
       });
+      setCustomBrand(hasPopularBrand ? '' : existingBrand);
       setExistingImages(getCarImages(car, ''));
     } catch (err) {
       setError(t('admin.notFound'));
@@ -58,15 +64,22 @@ const EditCar = () => {
     }
   };
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    if (name === 'brand' && value !== 'Other') {
+      setCustomBrand('');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSaving(true);
     try {
+      const finalBrand = form.brand === 'Other' ? customBrand.trim() : form.brand;
       const formData = new FormData();
-      Object.entries(form).forEach(([k, v]) => formData.append(k, v));
+      Object.entries(form).forEach(([k, v]) => formData.append(k, k === 'brand' ? finalBrand : v));
       formData.append('keepImages', imageFiles.length > 0 ? 'false' : 'true');
       imageFiles.forEach(f => formData.append('images', f));
       await api.put(`/cars/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
@@ -97,8 +110,26 @@ const EditCar = () => {
               </div>
               <div className="form-group">
                 <label className="form-label">{t('admin.brand')} *</label>
-                <input type="text" name="brand" value={form.brand} onChange={handleChange} className="form-input" required />
+                <select name="brand" value={form.brand} onChange={handleChange} className="form-select" required>
+                  <option value="">{t('search.allBrands')}</option>
+                  {popularBrands.map((brand) => (
+                    <option key={brand.name} value={brand.name}>{brand.name}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
               </div>
+              {form.brand === 'Other' && (
+                <div className="form-group">
+                  <label className="form-label">Enter brand name *</label>
+                  <input
+                    type="text"
+                    value={customBrand}
+                    onChange={(e) => setCustomBrand(e.target.value)}
+                    className="form-input"
+                    required
+                  />
+                </div>
+              )}
               <div className="form-group">
                 <label className="form-label">{t('admin.model')} *</label>
                 <input type="text" name="model" value={form.model} onChange={handleChange} className="form-input" required />

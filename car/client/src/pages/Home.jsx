@@ -13,7 +13,7 @@ import {
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import HeroSection from '../components/HeroSection';
 import SearchBar from '../components/SearchBar';
-import StatsBar from '../components/StatsBar';
+import BrandsSection from '../components/BrandsSection';
 import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
@@ -72,7 +72,7 @@ const Home = () => {
     <div className="home-page" id="home-page">
       <HeroSection />
       <SearchBar />
-      <StatsBar />
+      <BrandsSection />
 
       <section className="section popular-section home-section-alt" id="popular-cars">
         <div className="container">

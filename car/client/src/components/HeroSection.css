@@ -3,9 +3,10 @@
   min-height: 580px;
   display: flex;
   align-items: center;
+  direction: ltr;
   overflow: hidden;
   width: 100%;
-  background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 42%, #dbeafe 78%, #cfe0fc 100%);
+  background: #F0F4FD;
 }
 
 .hero-bg {
@@ -18,10 +19,7 @@
 .hero-bg-gradient {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 15% 50%, rgba(26, 109, 255, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 80% at 85% 40%, rgba(26, 109, 255, 0.1) 0%, transparent 50%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, transparent 40%);
+  background:#F0F4FD;
 }
 
 .hero-bg-glow {
@@ -36,7 +34,7 @@
   height: 420px;
   left: -8%;
   top: 20%;
-  background: rgba(255, 255, 255, 0.85);
+  background: #F0F4FD;
 }
 
 .hero-bg-glow--right {
@@ -44,7 +42,7 @@
   height: 500px;
   right: -5%;
   top: 10%;
-  background: rgba(26, 109, 255, 0.15);
+  background: #F0F4FD;
 }
 
 /* Soft wave / blur bridge between text and image */
@@ -56,13 +54,7 @@
   width: 32%;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.75) 25%,
-    rgba(232, 240, 254, 0.45) 55%,
-    transparent 100%
-  );
+  background: #F0F4FD;
   filter: blur(28px);
   transform: scaleX(1.15);
 }
@@ -76,12 +68,7 @@
   height: 15%;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(
-    105deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(255, 255, 255, 0.08) 60%,
-    transparent 100%
-  );
+  background: #F0F4FD;
   backdrop-filter: blur(2px);
   border-radius: 0 120px 120px 0;
 }
@@ -92,17 +79,32 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  direction: ltr;
+  gap: 40px;
   padding-top: 48px;
   padding-bottom: 48px;
   width: 100%;
 }
 
 .hero-text {
-  flex: 1;
+  flex: 0 0 38%;
   max-width: 540px;
   position: relative;
   z-index: 3;
+}
+
+.hero-text.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+.hero-text.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.hero-text.rtl .hero-actions {
+  justify-content: flex-start;
 }
 
 .hero-title {
@@ -134,13 +136,13 @@
 }
 
 .hero-image-wrap {
-  flex: 1;
-  max-width: 620px;
+  flex: 1 1 62%;
+  max-width: 820px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  min-height: 320px;
+  min-height: 520px;
 }
 
 .hero-image-blend {
@@ -153,9 +155,9 @@
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    #FCFDFF 0%,
-    rgba(232, 240, 254, 0.85) 20%,
-    rgba(232, 240, 254, 0.35) 50%,
+    #F0F4FD 0%,
+    #F0F4FD 30%,
+    #F0F4FD 50%,
     transparent 100%
   );
 }
@@ -169,24 +171,40 @@
   justify-content: center;
 }
 
-.hero-car-img {
-  width: 200%;
-  max-width: 1000px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 24px 48px rgba(26, 109, 255, 0.18));
-  -webkit-mask-image: linear-gradient(
-    to left,
-    #000 72%,
-    rgba(0, 0, 0, 0.6) 80%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to left,
-    #000 72%,
-    rgba(0, 0, 0, 0.6) 88%,
-    transparent 100%
-  );
+.hero-car-slider {
+  /*
+    HERO IMAGE SIZE CONTROL:
+    If the hero image still looks too small or leaves empty space,
+    increase max-width or height here.
+    Example:
+    max-width: 900px;
+    height: 560px;
+  */
+  position: relative;
+  width: 140%;
+  max-width: 2000px;
+  height: 620px;
+  flex-shrink: 0;
+  overflow: hidden;
+  
+}
+
+.hero-car-slider .hero-car-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 1.2s ease, transform 5s ease;
+}
+
+.hero-car-slider .hero-car-img.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
 }
 
 
@@ -227,9 +245,15 @@
   }
 
   .hero-text {
+    flex: 0 1 auto;
     max-width: 100%;
     padding-left: 16px;
     padding-right: 16px;
+  }
+
+  .hero-text.ltr,
+  .hero-text.rtl {
+    text-align: center;
   }
 
   .hero-subtitle {
@@ -250,7 +274,7 @@
     max-width: 100%;
     width: 100%;
     justify-content: center;
-    min-height: auto;
+    min-height: 320px;
     overflow: hidden;
   }
 
@@ -259,13 +283,25 @@
     overflow: hidden;
   }
 
-  .hero-car-img {
-    -webkit-mask-image: none;
-    mask-image: none;
+  .hero-car-slider {
     width: 100%;
-    max-width: 520px;
-    object-fit: cover;
-    object-position: center;
+    max-width: 720px;
+    height: 320px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-car-slider {
+    /*
+      MOBILE HERO IMAGE SIZE CONTROL:
+      If the image is too small on mobile, increase height.
+      If it takes too much space, reduce height.
+    */
+    width: 100%;
+    max-width: 100%;
+    height: 300px;
+    border-radius: 20px;
   }
 }
 
@@ -300,14 +336,13 @@
   .hero-image-wrap {
     max-width: 100%;
     width: 100%;
+    min-height: 280px;
   }
 
-  .hero-car-img {
-    width: 100vw;
+  .hero-car-slider {
+    width: 92vw;
     max-width: 92vw;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 25px;
+    height: 280px;
+    border-radius: 18px;
   }
 }

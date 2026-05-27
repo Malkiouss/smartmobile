@@ -13,6 +13,31 @@
   margin-bottom: 28px;
 }
 
+.analytics-dashboard.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.analytics-dashboard.rtl .analytics-stat-card,
+.analytics-dashboard.rtl .analytics-summary-card,
+.analytics-dashboard.rtl .analytics-chart-card,
+.analytics-dashboard.rtl .analytics-top-card,
+.analytics-dashboard.rtl .analytics-table-card {
+  direction: rtl;
+}
+
+.analytics-dashboard.rtl .analytics-table th,
+.analytics-dashboard.rtl .analytics-table td {
+  text-align: right;
+}
+
+.analytics-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .analytics-title {
   font-size: 1.8rem;
   font-weight: 800;
@@ -108,6 +133,13 @@
   margin-bottom: 28px;
 }
 
+.analytics-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+
 .analytics-chart-card {
   padding: 20px;
   min-width: 0;
@@ -173,6 +205,16 @@
   font-size: 0.9rem;
 }
 
+.analytics-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 180px;
+  color: var(--text-light);
+  font-weight: 700;
+}
+
 .analytics-table-card {
   padding: 20px;
 }
@@ -221,6 +263,11 @@
   font-weight: 700;
 }
 
+.analytics-empty-row {
+  text-align: center;
+  color: var(--text-light);
+}
+
 @media (max-width: 1100px) {
   .analytics-stats,
   .analytics-sales-grid,
@@ -239,7 +286,11 @@
     align-items: flex-start;
   }
 
-  .analytics-header .btn {
+  .analytics-header-actions {
+    width: 100%;
+  }
+
+  .analytics-header-actions .btn {
     width: 100%;
   }
 

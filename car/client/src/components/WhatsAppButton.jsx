@@ -1,8 +1,10 @@
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 
 const WHATSAPP_NUMBER = '212707852423';
+const INSTAGRAM_URL = 'https://www.instagram.com/autosmartmaroc.ma?igsh=enQ2MmJnM2N6OHkx&utm_source=qr';
+const FACEBOOK_URL = 'https://www.facebook.com/share/1FbVLk3yJx/?mibextid=wwXIfr';
 
 const WhatsAppButton = ({
   carName,
@@ -37,14 +39,34 @@ const WhatsAppButton = ({
 
   if (floating) {
     return (
-      <button
-        type="button"
-        className={`whatsapp-floating ${className}`}
-        onClick={handleClick}
-        aria-label={t('whatsapp.contact')}
-      >
-        <FaWhatsapp size={28} />
-      </button>
+      <div className={`floating-socials whatsapp-floating ${className}`} aria-label={t('social.contact')}>
+        <button
+          type="button"
+          className="floating-social whatsapp"
+          onClick={handleClick}
+          aria-label={t('whatsapp.contact')}
+        >
+          <FaWhatsapp size={28} />
+        </button>
+        <a
+          className="floating-social instagram"
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('social.instagram')}
+        >
+          <FaInstagram size={24} />
+        </a>
+        <a
+          className="floating-social facebook"
+          href={FACEBOOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('social.facebook')}
+        >
+          <FaFacebookF size={22} />
+        </a>
+      </div>
     );
   }
 

@@ -1,11 +1,28 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { fadeUp, staggerContainer } from '../utils/animations';
 import './HeroSection.css';
 
+const heroImages = [
+  'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=80',
+  'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80',
+  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=900&q=80',
+  'https://images.unsplash.com/photo-1542362567-b07e54358753?w=900&q=80',
+];
+
 const HeroSection = () => {
-  const { t } = useLanguage();
+  const [currentImage, setCurrentImage] = useState(0);
+  const { language, t } = useLanguage();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="hero" id="hero-section">
@@ -20,7 +37,7 @@ const HeroSection = () => {
 
       <div className="container hero-content">
         <motion.div
-          className="hero-text"
+          className={`hero-text ${language === 'ar' ? 'rtl' : 'ltr'}`}
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
@@ -48,11 +65,16 @@ const HeroSection = () => {
         >
           <div className="hero-image-blend" aria-hidden="true" />
           <div className="hero-image">
-            <img
-              src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=900&q=80"
-              alt="BMW M5 Competition"
-              className="hero-car-img"
-            />
+            <div className="hero-car-slider">
+              {heroImages.map((image, index) => (
+                <img
+                  key={image}
+                  src={image}
+                  alt={`Hero car ${index + 1}`}
+                  className={`hero-car-img ${index === currentImage ? 'active' : ''}`}
+                />
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

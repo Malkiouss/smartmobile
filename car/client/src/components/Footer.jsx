@@ -4,6 +4,7 @@ import { FiMapPin, FiPhone, FiMail } from 'react-icons/fi';
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
+import logo from '../assets/logo.png';
 import './Footer.css';
 
 const WHATSAPP_NUMBER = '212707852423';
@@ -23,9 +24,7 @@ const Footer = () => {
         <motion.div className="footer-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <motion.div className="footer-brand" variants={fadeUp}>
             <Link to="/" className="footer-logo">
-              <span className="logo-auto">Auto</span>
-              <span className="logo-smart">Smart</span>
-              <span className="logo-maroc">MAROC</span>
+              <img src={logo} alt="AutoSmart Maroc" className="footer-logo-img" />
             </Link>
             <p className="footer-desc">{t('footer.desc')}</p>
             <div className="footer-socials">

@@ -24,9 +24,10 @@ import {
   FaHeart,
   FaWhatsapp,
 } from 'react-icons/fa';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiRefreshCw } from 'react-icons/fi';
 import api from '../../services/api';
-import { fadeUp, staggerContainer, viewportOnce } from '../../utils/animations';
+import { useLanguage } from '../../context/LanguageContext';
+import { fadeUp, staggerContainer, viewportMobile, viewportOnce } from '../../utils/animations';
 import './AnalyticsDashboard.css';
 
 const COLORS = ['#1a6dff', '#10b981', '#f59e0b', '#e53e3e'];
@@ -60,6 +61,7 @@ const emptyAnalytics = {
 };
 
 const AnalyticsDashboard = () => {
+  const { language, t } = useLanguage();
   const [analytics, setAnalytics] = useState(emptyAnalytics);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -70,6 +72,8 @@ const AnalyticsDashboard = () => {
 
   const fetchAnalytics = async () => {
     try {
+      setLoading(true);
+      setError('');
       const token = localStorage.getItem('autosmart_token');
       const res = await api.get('/api/admin/analytics', {
         headers: token ? { Authorization: `Bearer ${token}` } : {}
@@ -93,48 +97,61 @@ const AnalyticsDashboard = () => {
     }
   };
 
-  const formatNumber = (value) => new Intl.NumberFormat('fr-MA').format(value || 0);
+  const locale = language === 'ar' ? 'ar-MA' : language === 'en' ? 'en-US' : 'fr-MA';
+  const formatNumber = (value) => new Intl.NumberFormat(locale).format(value || 0);
   const formatCurrency = (value) => `${formatNumber(value)} DH`;
-  const formatDate = (value) => value ? new Intl.DateTimeFormat('fr-MA').format(new Date(value)) : '-';
+  const formatDate = (value) => value ? new Intl.DateTimeFormat(locale).format(new Date(value)) : '-';
+  const statusPieData = analytics.chartData.statusPie.map((item) => {
+    const key = String(item.name || '').toLowerCase();
+    if (key.includes('sold') || key.includes('vendu')) return { ...item, name: t('car.sold') };
+    if (key.includes('available') || key.includes('disponible')) return { ...item, name: t('car.available') };
+    return item;
+  });
 
   const statCards = [
-    { label: 'Total Cars', value: analytics.totalCars, icon: <FaCar /> },
-    { label: 'Available', value: analytics.availableCars, icon: <FaCheckCircle />, tone: 'success' },
-    { label: 'Sold', value: analytics.soldCars, icon: <FaCar />, tone: 'danger' },
-    { label: 'Uploaded This Week', value: analytics.uploadedThisWeek, icon: <FaCalendarWeek /> },
-    { label: 'Sold This Month', value: analytics.soldThisMonth, icon: <FaChartLine />, tone: 'success' },
-    { label: 'Total Views', value: analytics.totalViews, icon: <FaEye /> },
-    { label: 'Total Likes', value: analytics.totalLikes, icon: <FaHeart />, tone: 'danger' },
-    { label: 'WhatsApp Clicks', value: analytics.totalWhatsappClicks, icon: <FaWhatsapp />, tone: 'whatsapp' },
+    { label: t('analytics.totalCars'), value: analytics.totalCars, icon: <FaCar /> },
+    { label: t('analytics.availableCars'), value: analytics.availableCars, icon: <FaCheckCircle />, tone: 'success' },
+    { label: t('analytics.soldCars'), value: analytics.soldCars, icon: <FaCar />, tone: 'danger' },
+    { label: t('analytics.uploadedThisWeek'), value: analytics.uploadedThisWeek, icon: <FaCalendarWeek /> },
+    { label: t('analytics.uploadedThisMonth'), value: analytics.uploadedThisMonth, icon: <FaCalendarWeek /> },
+    { label: t('analytics.soldThisMonth'), value: analytics.soldThisMonth, icon: <FaChartLine />, tone: 'success' },
+    { label: t('analytics.totalViews'), value: analytics.totalViews, icon: <FaEye /> },
+    { label: t('analytics.totalLikes'), value: analytics.totalLikes, icon: <FaHeart />, tone: 'danger' },
+    { label: t('analytics.whatsappClicks'), value: analytics.totalWhatsappClicks, icon: <FaWhatsapp />, tone: 'whatsapp' },
   ];
 
   const topSections = [
-    { title: 'Most Viewed Cars', cars: analytics.topViewedCars, metric: 'views' },
-    { title: 'Most Liked Cars', cars: analytics.topLikedCars, metric: 'likes' },
-    { title: 'Most Contacted Cars', cars: analytics.topContactedCars, metric: 'whatsappClicks' },
-    { title: 'Recently Sold Cars', cars: analytics.recentSoldCars, metric: 'price', currency: true },
+    { title: t('analytics.mostViewedCars'), cars: analytics.topViewedCars, metric: 'views' },
+    { title: t('analytics.mostLikedCars'), cars: analytics.topLikedCars, metric: 'likes' },
+    { title: t('analytics.mostContactedCars'), cars: analytics.topContactedCars, metric: 'whatsappClicks' },
+    { title: t('analytics.recentlySoldCars'), cars: analytics.recentSoldCars, metric: 'price', currency: true },
   ];
 
   return (
-    <div className="analytics-page" id="analytics-dashboard">
+    <div className={`analytics-page analytics-dashboard ${language === 'ar' ? 'rtl' : ''}`} id="analytics-dashboard">
       <div className="container">
-        <motion.div className="analytics-header" variants={fadeUp} initial="hidden" animate="visible">
+        <motion.div className="analytics-header" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <div>
-            <h1 className="analytics-title">Analytics Dashboard</h1>
-            <p className="analytics-subtitle">Track car performance, sales, views, likes, and WhatsApp contacts.</p>
+            <h1 className="analytics-title">{t('analytics.title')}</h1>
+            <p className="analytics-subtitle">{t('analytics.subtitle')}</p>
           </div>
-          <Link to="/admin" className="btn btn-outline">
-            <FiArrowLeft /> Back to Admin Dashboard
-          </Link>
+          <div className="analytics-header-actions">
+            <Link to="/admin" className="btn btn-outline">
+              <FiArrowLeft /> {t('analytics.backAdmin')}
+            </Link>
+            <button type="button" className="btn btn-primary" onClick={fetchAnalytics}>
+              <FiRefreshCw /> {t('analytics.refresh')}
+            </button>
+          </div>
         </motion.div>
 
-        {error && <div className="login-error">{error}</div>}
+        {error && <div className="login-error">{t('analytics.loadError')}: {error}</div>}
 
         {loading ? (
-          <div className="spinner" />
+          <div className="analytics-loading"><div className="spinner" /><span>{t('analytics.loading')}</span></div>
         ) : (
           <>
-            <motion.div className="analytics-stats" variants={staggerContainer} initial="hidden" animate="visible">
+            <motion.div className="analytics-stats" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
               {statCards.map((card) => (
                 <motion.article className="analytics-stat-card" key={card.label} variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>
                   <div className={`analytics-stat-icon ${card.tone || ''}`}>{card.icon}</div>
@@ -148,26 +165,26 @@ const AnalyticsDashboard = () => {
 
             <motion.div className="analytics-sales-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
               <motion.div className="analytics-summary-card" variants={fadeUp}>
-                <span className="analytics-summary-label">Cars Sold This Week</span>
+                <span className="analytics-summary-label">{t('analytics.soldThisWeek')}</span>
                 <strong>{formatNumber(analytics.soldThisWeek)}</strong>
               </motion.div>
               <motion.div className="analytics-summary-card" variants={fadeUp}>
-                <span className="analytics-summary-label">Cars Uploaded This Month</span>
+                <span className="analytics-summary-label">{t('analytics.uploadedThisMonth')}</span>
                 <strong>{formatNumber(analytics.uploadedThisMonth)}</strong>
               </motion.div>
               <motion.div className="analytics-summary-card" variants={fadeUp}>
-                <span className="analytics-summary-label">Estimated Sold Value</span>
+                <span className="analytics-summary-label">{t('analytics.estimatedSoldValue')}</span>
                 <strong>{formatCurrency(analytics.estimatedSoldValue)}</strong>
               </motion.div>
               <motion.div className="analytics-summary-card" variants={fadeUp}>
-                <span className="analytics-summary-label">Average Sold Price</span>
+                <span className="analytics-summary-label">{t('analytics.averageSoldPrice')}</span>
                 <strong>{formatCurrency(analytics.averageSoldPrice)}</strong>
               </motion.div>
             </motion.div>
 
-            <motion.div className="analytics-charts" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+            <motion.div className="analytics-charts" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportMobile}>
               <motion.article className="analytics-chart-card" variants={fadeUp}>
-                <h2>Views per car</h2>
+                <h2>{t('analytics.viewsPerCar')}</h2>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={analytics.chartData.viewsPerCar}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -180,11 +197,11 @@ const AnalyticsDashboard = () => {
               </motion.article>
 
               <motion.article className="analytics-chart-card" variants={fadeUp}>
-                <h2>Available vs Sold</h2>
+                <h2>{t('analytics.availableVsSold')}</h2>
                 <ResponsiveContainer width="100%" height={260}>
                   <PieChart>
-                    <Pie data={analytics.chartData.statusPie} dataKey="value" nameKey="name" outerRadius={92} label>
-                      {analytics.chartData.statusPie.map((entry, index) => (
+                    <Pie data={statusPieData} dataKey="value" nameKey="name" outerRadius={92} label>
+                      {statusPieData.map((entry, index) => (
                         <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
@@ -194,7 +211,7 @@ const AnalyticsDashboard = () => {
               </motion.article>
 
               <motion.article className="analytics-chart-card" variants={fadeUp}>
-                <h2>WhatsApp clicks per car</h2>
+                <h2>{t('analytics.whatsappClicksPerCar')}</h2>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={analytics.chartData.whatsappPerCar}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -207,7 +224,7 @@ const AnalyticsDashboard = () => {
               </motion.article>
 
               <motion.article className="analytics-chart-card" variants={fadeUp}>
-                <h2>Uploads over time</h2>
+                <h2>{t('analytics.uploadsOverTime')}</h2>
                 <ResponsiveContainer width="100%" height={260}>
                   <LineChart data={analytics.chartData.uploadsOverTime}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -220,7 +237,10 @@ const AnalyticsDashboard = () => {
               </motion.article>
             </motion.div>
 
-            <motion.div className="analytics-top-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+            <motion.h2 className="analytics-section-title" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportMobile}>
+              {t('analytics.topPerformingCars')}
+            </motion.h2>
+            <motion.div className="analytics-top-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportMobile}>
               {topSections.map((section) => (
                 <motion.article className="analytics-top-card" key={section.title} variants={fadeUp}>
                   <h2>{section.title}</h2>
@@ -230,30 +250,30 @@ const AnalyticsDashboard = () => {
                       <span>{car.name}</span>
                       <strong>{section.currency ? formatCurrency(car[section.metric]) : formatNumber(car[section.metric])}</strong>
                     </div>
-                  )) : <p className="analytics-empty">No data yet.</p>}
+                  )) : <p className="analytics-empty">{t('analytics.noData')}</p>}
                 </motion.article>
               ))}
             </motion.div>
 
-            <motion.div className="analytics-table-card" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+            <motion.div className="analytics-table-card" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportMobile}>
               <div className="analytics-table-header">
-                <h2>Full car analytics</h2>
-                <span>{analytics.carsTable.length} cars</span>
+                <h2>{t('analytics.fullTable')}</h2>
+                <span>{t('analytics.carsCount').replace('{{count}}', analytics.carsTable.length)}</span>
               </div>
               <div className="analytics-table-wrapper">
                 <table className="analytics-table">
                   <thead>
                     <tr>
-                      <th>Image</th>
-                      <th>Car</th>
-                      <th>Status</th>
-                      <th>Price</th>
-                      <th>Views</th>
-                      <th>Likes</th>
-                      <th>WhatsApp</th>
-                      <th>Conversion</th>
-                      <th>Uploaded</th>
-                      <th>Sold date</th>
+                      <th>{t('analytics.image')}</th>
+                      <th>{t('analytics.car')}</th>
+                      <th>{t('analytics.status')}</th>
+                      <th>{t('analytics.price')}</th>
+                      <th>{t('analytics.views')}</th>
+                      <th>{t('analytics.likes')}</th>
+                      <th>{t('analytics.whatsappClicks')}</th>
+                      <th>{t('analytics.conversionRate')}</th>
+                      <th>{t('analytics.uploadedDate')}</th>
+                      <th>{t('analytics.soldDate')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -261,7 +281,7 @@ const AnalyticsDashboard = () => {
                       <tr key={car.id}>
                         <td><img className="analytics-car-thumb" src={car.image || fallbackImage} alt={car.name} /></td>
                         <td className="analytics-car-name">{car.name}</td>
-                        <td><span className={`badge ${car.status === 'sold' ? 'badge-sold' : 'badge-available'}`}>{car.status === 'sold' ? 'Vendu' : 'Disponible'}</span></td>
+                        <td><span className={`badge ${car.status === 'sold' ? 'badge-sold' : 'badge-available'}`}>{car.status === 'sold' ? t('car.sold') : t('car.available')}</span></td>
                         <td>{formatCurrency(car.price)}</td>
                         <td>{formatNumber(car.views)}</td>
                         <td>{formatNumber(car.likes)}</td>
@@ -271,6 +291,11 @@ const AnalyticsDashboard = () => {
                         <td>{formatDate(car.soldAt)}</td>
                       </tr>
                     ))}
+                    {analytics.carsTable.length === 0 && (
+                      <tr>
+                        <td colSpan="10" className="analytics-empty-row">{t('analytics.noData')}</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

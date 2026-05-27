@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft } from 'react-icons/fi';
 import ImageUploadManager from '../../components/ImageUploadManager';
 import { useLanguage } from '../../context/LanguageContext';
+import { popularBrands } from '../../data/brands';
 import api from '../../services/api';
 import { fadeUp, staggerContainer } from '../../utils/animations';
 import './AddCar.css';
@@ -14,6 +15,7 @@ const AddCar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
+  const [customBrand, setCustomBrand] = useState('');
   const [form, setForm] = useState({
     name: '',
     brand: '',
@@ -28,7 +30,11 @@ const AddCar = () => {
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    if (name === 'brand' && value !== 'Other') {
+      setCustomBrand('');
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -37,9 +43,10 @@ const AddCar = () => {
     setLoading(true);
 
     try {
+      const finalBrand = form.brand === 'Other' ? customBrand.trim() : form.brand;
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value);
+        formData.append(key, key === 'brand' ? finalBrand : value);
       });
       imageFiles.forEach(file => {
         formData.append('images', file);
@@ -79,8 +86,27 @@ const AddCar = () => {
               </div>
               <div className="form-group">
                 <label className="form-label">{t('admin.brand')} *</label>
-                <input type="text" name="brand" value={form.brand} onChange={handleChange} className="form-input" placeholder={t('admin.placeholderBrand')} required />
+                <select name="brand" value={form.brand} onChange={handleChange} className="form-select" required>
+                  <option value="">{t('search.allBrands')}</option>
+                  {popularBrands.map((brand) => (
+                    <option key={brand.name} value={brand.name}>{brand.name}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
               </div>
+              {form.brand === 'Other' && (
+                <div className="form-group">
+                  <label className="form-label">Enter brand name *</label>
+                  <input
+                    type="text"
+                    value={customBrand}
+                    onChange={(e) => setCustomBrand(e.target.value)}
+                    className="form-input"
+                    placeholder={t('admin.placeholderBrand')}
+                    required
+                  />
+                </div>
+              )}
               <div className="form-group">
                 <label className="form-label">{t('admin.model')} *</label>
                 <input type="text" name="model" value={form.model} onChange={handleChange} className="form-input" placeholder={t('admin.placeholderModel')} required />

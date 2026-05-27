@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch } from 'react-icons/fi';
 import { useLanguage } from '../context/LanguageContext';
+import { popularBrands } from '../data/brands';
 import { fadeUp, viewportOnce } from '../utils/animations';
 import './SearchBar.css';
 
-const brands = ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche', 'Land Rover', 'Volkswagen', 'Toyota', 'Honda'];
+const brands = popularBrands.map((brand) => brand.name);
 const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i);
 
 const SearchBar = () => {

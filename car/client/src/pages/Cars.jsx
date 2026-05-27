@@ -4,16 +4,17 @@ import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
 import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
+import { popularBrands } from '../data/brands';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Cars.css';
 
-const brands = ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche', 'Land Rover', 'Volkswagen', 'Toyota', 'Honda'];
+const brands = popularBrands.map((brand) => brand.name);
 const years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i);
 
 const Cars = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useLanguage();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,15 +27,15 @@ const Cars = () => {
   });
 
   useEffect(() => {
-    fetchCars();
-  }, []);
-
-  useEffect(() => {
     const brand = searchParams.get('brand');
-    if (brand) {
-      setFilters(prev => ({ ...prev, brand }));
-      fetchCars({ brand });
-    }
+    const nextFilters = {
+      brand: brand || '',
+      model: searchParams.get('model') || '',
+      maxPrice: searchParams.get('maxPrice') || '',
+      minYear: searchParams.get('minYear') || '',
+    };
+    setFilters(nextFilters);
+    fetchCars(nextFilters);
   }, [searchParams]);
 
   const fetchCars = async (overrideFilters) => {
@@ -47,7 +48,12 @@ const Cars = () => {
       if (f.maxPrice) params.maxPrice = f.maxPrice;
       if (f.minYear) params.minYear = f.minYear;
       const res = await api.get('/cars', { params });
-      setCars(unwrapArray(res.data));
+      const nextCars = unwrapArray(res.data);
+      const normalizedBrand = f.brand?.toLowerCase();
+      setCars(normalizedBrand
+        ? nextCars.filter((car) => String(car.brand || car.marque || '').toLowerCase() === normalizedBrand)
+        : nextCars
+      );
     } catch (err) {
       console.error('Error fetching cars:', err);
     } finally {
@@ -61,12 +67,16 @@ const Cars = () => {
 
   const handleApplyFilters = (e) => {
     e.preventDefault();
-    fetchCars();
+    const nextParams = {};
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) nextParams[key] = value;
+    });
+    setSearchParams(nextParams);
   };
 
   const clearFilters = () => {
     setFilters({ brand: '', model: '', maxPrice: '', minYear: '' });
-    fetchCars({ brand: '', model: '', maxPrice: '', minYear: '' });
+    setSearchParams({});
   };
 
   const hasActiveFilters = Object.values(filters).some(v => v !== '');
@@ -156,7 +166,14 @@ const Cars = () => {
 
         <main className="cars-main">
           <div className="cars-top-bar">
-            <p className="cars-count">{loading ? '...' : countLabel}</p>
+            <p className="cars-count">
+              {loading ? '...' : filters.brand ? `Showing ${filters.brand} cars · ${countLabel}` : countLabel}
+            </p>
+            {filters.brand && (
+              <button className="cars-clear-brand" type="button" onClick={clearFilters}>
+                <FiX /> Show all cars
+              </button>
+            )}
           </div>
 
           {loading ? (

@@ -11,27 +11,17 @@
 }
 
 .footer-logo {
-  display: flex;
-  align-items: baseline;
-  font-size: 1.4rem;
-  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
   margin-bottom: 16px;
 }
 
-.footer-logo .logo-auto {
-  color: #fff;
-}
-
-.footer-logo .logo-smart {
-  color: var(--primary);
-}
-
-.footer-logo .logo-maroc {
-  font-size: 0.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: 3px;
-  margin-left: 3px;
+.footer-logo-img {
+  width: 150px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .footer-desc {
@@ -111,6 +101,11 @@
     grid-template-columns: 1fr;
     gap: 32px;
   }
+
+  .footer-logo-img {
+    width: 130px;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -120,10 +115,6 @@
 
   .footer-grid {
     gap: 28px;
-  }
-
-  .footer-logo {
-    font-size: 1.25rem;
   }
 
   .footer-desc {

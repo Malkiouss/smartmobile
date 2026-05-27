@@ -1,0 +1,93 @@
+.brands-section {
+  background: #ffffff;
+  padding: 56px 20px;
+}
+
+.brands-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.brands-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: #1f2433;
+  margin-bottom: 10px;
+}
+
+.brands-subtitle {
+  color: #6b7280;
+  margin-bottom: 36px;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 28px 22px;
+}
+
+.brand-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 14px 10px;
+  border-radius: 18px;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.brand-card:hover {
+  background: #f8fbff;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.brand-logo {
+  /*
+    BRAND LOGO SIZE CONTROL:
+    Increase width/height if logos look too small.
+    Reduce if the section becomes too big.
+  */
+  width: 82px;
+  height: 62px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #101828;
+}
+
+@media (max-width: 992px) {
+  .brands-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .brands-section {
+    padding: 42px 12px;
+  }
+
+  .brands-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px 10px;
+  }
+
+  .brand-card {
+    padding: 12px 6px;
+  }
+
+  .brand-logo {
+    width: 64px;
+    height: 48px;
+  }
+
+  .brand-name {
+    font-size: 0.82rem;
+  }
+}

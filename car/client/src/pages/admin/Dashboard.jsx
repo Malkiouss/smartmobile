@@ -60,7 +60,7 @@ const Dashboard = () => {
           </div>
           <div className="dashboard-header-actions">
             <Link to="/admin/analytics" className="btn btn-outline" id="analytics-dashboard-btn">
-              <FiBarChart2 /> Analytics Dashboard
+              <FiBarChart2 /> {t('analytics.title')}
             </Link>
             <Link to="/admin/add" className="btn btn-primary" id="add-car-btn">
               <FiPlus /> {t('admin.addCar')}
