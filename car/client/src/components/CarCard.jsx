@@ -67,13 +67,14 @@ const CarCard = ({ car }) => {
       variants={fadeUp}
       whileHover={{ y: isSold ? 0 : -4, scale: isSold ? 1 : 1.01 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
+      aria-label={`${car.name} ${car.year || ''}`}
     >
       {isSold && (
         <div className="car-card-sold-badge">{t('car.soldUpper')}</div>
       )}
 
       <div className="car-card-image-wrapper">
-        <img src={imageUrl} alt={car.name} className="car-card-image" loading="lazy" />
+        <img src={imageUrl} alt={`${car.name} chez AutoSmart Maroc`} className="car-card-image" loading="lazy" decoding="async" />
         <button
           className={`car-card-heart ${liked ? 'liked' : ''}`}
           onClick={handleLike}
@@ -109,6 +110,7 @@ const CarCard = ({ car }) => {
             to={detailsPath}
             className="btn btn-primary btn-sm car-card-btn"
             onClick={(e) => e.stopPropagation()}
+            aria-label={`${t('car.details')} ${car.name}`}
           >
             {t('car.details')}
           </Link>

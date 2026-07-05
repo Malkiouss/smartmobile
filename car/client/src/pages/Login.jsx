@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiLock, FiMail } from 'react-icons/fi';
+import SEO from '../components/SEO';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { fadeUp } from '../utils/animations';
@@ -33,6 +34,7 @@ const Login = () => {
 
   return (
     <div className="login-page" id="login-page">
+      <SEO page="login" noindex />
       <motion.div className="login-card" variants={fadeUp} initial="hidden" animate="visible">
         <div className="login-header">
           <div className="login-logo">
@@ -47,11 +49,12 @@ const Login = () => {
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">{t('contact.email')}</label>
+            <label className="form-label" htmlFor="login-email">{t('contact.email')}</label>
             <div className="login-input-wrapper">
               <FiMail className="login-input-icon" />
               <input
                 type="email"
+                id="login-email"
                 className="form-input login-input"
                 placeholder="admin@autosmart.ma"
                 value={email}
@@ -62,11 +65,12 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">{t('login.password')}</label>
+            <label className="form-label" htmlFor="login-password">{t('login.password')}</label>
             <div className="login-input-wrapper">
               <FiLock className="login-input-icon" />
               <input
                 type="password"
+                id="login-password"
                 className="form-input login-input"
                 placeholder="••••••••"
                 value={password}

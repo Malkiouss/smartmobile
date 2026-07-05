@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { FiMapPin, FiPhone, FiMail, FiClock } from 'react-icons/fi';
+import SEO from '../components/SEO';
 import { useLanguage } from '../context/LanguageContext';
+import { breadcrumbSchema, localBusinessSchema } from '../seo/schema';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Contact.css';
 
@@ -37,6 +39,16 @@ const Contact = () => {
 
   return (
     <div className="contact-page" id="contact-page">
+      <SEO
+        page="contact"
+        schemas={[
+          localBusinessSchema,
+          breadcrumbSchema([
+            { name: 'Accueil', path: '/' },
+            { name: 'Contact', path: '/contact' },
+          ]),
+        ]}
+      />
       <motion.div className="contact-hero" variants={staggerContainer} initial="hidden" animate="visible">
         <div className="container">
           <motion.h1 className="contact-hero-title" variants={fadeUp}>{t('contact.title')}</motion.h1>
@@ -51,21 +63,21 @@ const Contact = () => {
             <form className="contact-form" onSubmit={handleSubmit}>
               <div className="contact-form-row">
                 <div className="form-group">
-                  <label className="form-label">{t('contact.name')}</label>
-                  <input type="text" name="name" className="form-input" placeholder={t('contact.namePlaceholder')} />
+                  <label className="form-label" htmlFor="contact-name">{t('contact.name')}</label>
+                  <input id="contact-name" type="text" name="name" className="form-input" placeholder={t('contact.namePlaceholder')} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">{t('contact.email')}</label>
-                  <input type="email" name="email" className="form-input" placeholder={t('contact.emailPlaceholder')} />
+                  <label className="form-label" htmlFor="contact-email">{t('contact.email')}</label>
+                  <input id="contact-email" type="email" name="email" className="form-input" placeholder={t('contact.emailPlaceholder')} />
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label">{t('contact.subject')}</label>
-                <input type="text" name="subject" className="form-input" placeholder={t('contact.subjectPlaceholder')} />
+                <label className="form-label" htmlFor="contact-subject">{t('contact.subject')}</label>
+                <input id="contact-subject" type="text" name="subject" className="form-input" placeholder={t('contact.subjectPlaceholder')} />
               </div>
               <div className="form-group">
-                <label className="form-label">{t('contact.message')}</label>
-                <textarea name="message" className="form-textarea" placeholder={t('contact.messagePlaceholder')} rows="5"></textarea>
+                <label className="form-label" htmlFor="contact-message">{t('contact.message')}</label>
+                <textarea id="contact-message" name="message" className="form-textarea" placeholder={t('contact.messagePlaceholder')} rows="5"></textarea>
               </div>
               <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
                 {t('contact.send')}

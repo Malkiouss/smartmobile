@@ -44,8 +44,8 @@ const SearchBar = () => {
         viewport={viewportOnce}
       >
         <div className="search-field">
-          <label className="search-label">{t('search.brand')}</label>
-          <select name="brand" value={filters.brand} onChange={handleChange} className="search-select">
+          <label className="search-label" htmlFor="home-search-brand">{t('search.brand')}</label>
+          <select id="home-search-brand" name="brand" value={filters.brand} onChange={handleChange} className="search-select">
             <option value="">{t('search.allBrands')}</option>
             {brands.map((b) => (
               <option key={b} value={b}>{b}</option>
@@ -56,8 +56,9 @@ const SearchBar = () => {
         <div className="search-divider" />
 
         <div className="search-field">
-          <label className="search-label">{t('search.model')}</label>
+          <label className="search-label" htmlFor="home-search-model">{t('search.model')}</label>
           <input
+            id="home-search-model"
             type="text"
             name="model"
             value={filters.model}
@@ -70,8 +71,9 @@ const SearchBar = () => {
         <div className="search-divider" />
 
         <div className="search-field">
-          <label className="search-label">{t('search.maxPrice')}</label>
+          <label className="search-label" htmlFor="home-search-max-price">{t('search.maxPrice')}</label>
           <input
+            id="home-search-max-price"
             type="number"
             name="maxPrice"
             value={filters.maxPrice}
@@ -84,8 +86,8 @@ const SearchBar = () => {
         <div className="search-divider" />
 
         <div className="search-field">
-          <label className="search-label">{t('search.minYear')}</label>
-          <select name="minYear" value={filters.minYear} onChange={handleChange} className="search-select">
+          <label className="search-label" htmlFor="home-search-min-year">{t('search.minYear')}</label>
+          <select id="home-search-min-year" name="minYear" value={filters.minYear} onChange={handleChange} className="search-select">
             <option value="">{t('search.minYearPlaceholder')}</option>
             {years.map((y) => (
               <option key={y} value={y}>{y}</option>
@@ -93,7 +95,7 @@ const SearchBar = () => {
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary search-btn" id="search-btn">
+        <button type="submit" className="btn btn-primary search-btn" id="search-btn" aria-label={t('search.submit')}>
           <FiSearch size={18} />
           <span>{t('search.submit')}</span>
         </button>

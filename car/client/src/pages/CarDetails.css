@@ -211,7 +211,8 @@
   padding: 120px 24px;
 }
 
-.car-details-empty h2 {
+.car-details-empty h1 {
+  font-size: 1.5em;
   margin-bottom: 16px;
   color: var(--text);
 }

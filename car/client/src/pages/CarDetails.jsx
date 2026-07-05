@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiHeart, FiNavigation, FiTag, FiPackage, FiArrowLeft } from 'react-icons/fi';
+import SEO from '../components/SEO';
 import WhatsAppButton from '../components/WhatsAppButton';
 import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import { getCarImages } from '../services/images';
 import { unwrapData } from '../services/response';
+import { breadcrumbSchema, productSchema, vehicleSchema } from '../seo/schema';
+import { carDescription, carImage, carTitle } from '../seo/site';
 import { fadeUp, fadeIn, staggerContainer, viewportOnce } from '../utils/animations';
 import './CarDetails.css';
 
@@ -46,10 +49,23 @@ const CarDetails = () => {
     }
   };
 
-  if (loading) return <div className="spinner" style={{ marginTop: '120px' }} />;
+  const detailsPath = `/voitures/${id}`;
+
+  if (loading) return (
+    <>
+      <SEO page="cars" path={detailsPath} />
+      <div className="spinner" style={{ marginTop: '120px' }} />
+    </>
+  );
   if (!car) return (
     <div className="car-details-empty">
-      <h2>{t('details.notFound')}</h2>
+      <SEO
+        title={`${t('details.notFound')} | AutoSmart Maroc`}
+        description="Cette voiture n est pas disponible. Consultez les autres voitures d occasion et de luxe AutoSmart Maroc au Maroc."
+        path={detailsPath}
+        noindex
+      />
+      <h1>{t('details.notFound')}</h1>
       <Link to="/voitures" className="btn btn-primary">{t('details.backCars')}</Link>
     </div>
   );
@@ -80,6 +96,23 @@ const CarDetails = () => {
 
   return (
     <div className="car-details" id="car-details-page">
+      <SEO
+        title={carTitle(car)}
+        description={carDescription(car)}
+        keywords={`${car.name}, ${car.brand}, ${car.model}, voiture occasion Maroc, voiture luxe Maroc, AutoSmart Maroc, Ain Taoujdate`}
+        path={detailsPath}
+        image={carImage(car)}
+        type="product"
+        schemas={[
+          breadcrumbSchema([
+            { name: 'Accueil', path: '/' },
+            { name: 'Voitures', path: '/voitures' },
+            { name: car.name, path: detailsPath },
+          ]),
+          vehicleSchema(car, detailsPath),
+          productSchema(car, detailsPath),
+        ]}
+      />
       <div className="container">
         <motion.div variants={fadeUp} initial="hidden" animate="visible">
           <Link to="/voitures" className="car-details-back">
@@ -95,7 +128,7 @@ const CarDetails = () => {
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
             >
-              <img src={images[selectedImage]} alt={car.name} />
+              <img src={images[selectedImage]} alt={`${car.name} chez AutoSmart Maroc`} decoding="async" fetchPriority="high" />
             </motion.div>
             {images.length > 1 && (
               <motion.div className="car-details-thumbnails" variants={staggerContainer} initial="hidden" animate="visible">
@@ -107,8 +140,9 @@ const CarDetails = () => {
                     variants={fadeUp}
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.98 }}
+                    aria-label={`${car.name} image ${idx + 1}`}
                   >
-                    <img src={img} alt={`${car.name} - ${idx + 1}`} />
+                    <img src={img} alt={`${car.name} - ${idx + 1}`} loading="lazy" decoding="async" />
                   </motion.button>
                 ))}
               </motion.div>
@@ -169,6 +203,7 @@ const CarDetails = () => {
                 className={`btn btn-outline btn-lg car-details-like ${liked ? 'liked' : ''}`}
                 onClick={handleLike}
                 disabled={liked}
+                aria-label={t('car.favorite')}
               >
                 <FiHeart />
                 {liked ? `${car.likes || 0}` : `${car.likes || 0}`}

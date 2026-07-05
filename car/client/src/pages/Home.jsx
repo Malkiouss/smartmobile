@@ -11,11 +11,13 @@ import {
   FiArrowRight,
 } from 'react-icons/fi';
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import SEO from '../components/SEO';
 import HeroSection from '../components/HeroSection';
 import SearchBar from '../components/SearchBar';
 import BrandsSection from '../components/BrandsSection';
 import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
+import { breadcrumbSchema, localBusinessSchema, organizationSchema, websiteSchema } from '../seo/schema';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
@@ -70,6 +72,15 @@ const Home = () => {
 
   return (
     <div className="home-page" id="home-page">
+      <SEO
+        page="home"
+        schemas={[
+          organizationSchema,
+          localBusinessSchema,
+          websiteSchema,
+          breadcrumbSchema([{ name: 'Accueil', path: '/' }]),
+        ]}
+      />
       <HeroSection />
       <SearchBar />
       <BrandsSection />
@@ -176,6 +187,8 @@ const Home = () => {
               <img
                 src="https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg"
                 alt={t('home.showroomAlt')}
+                loading="lazy"
+                decoding="async"
               />
             </motion.div>
           </motion.div>
@@ -234,7 +247,7 @@ const Home = () => {
             </div>
           </div>
           <div className="home-contact-cta-actions">
-            <button type="button" className="btn btn-whatsapp btn-lg" onClick={openWhatsApp}>
+            <button type="button" className="btn btn-whatsapp btn-lg" onClick={openWhatsApp} aria-label={t('home.whatsapp')}>
               <FaWhatsapp size={22} />
               {t('home.whatsapp')}
             </button>

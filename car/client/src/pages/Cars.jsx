@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
+import SEO from '../components/SEO';
 import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
 import { popularBrands } from '../data/brands';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
+import { breadcrumbSchema } from '../seo/schema';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Cars.css';
 
@@ -84,6 +86,15 @@ const Cars = () => {
 
   return (
     <div className="cars-page" id="cars-page">
+      <SEO
+        page="cars"
+        schemas={[
+          breadcrumbSchema([
+            { name: 'Accueil', path: '/' },
+            { name: 'Voitures', path: '/voitures' },
+          ]),
+        ]}
+      />
       <motion.div
         className="cars-hero"
         initial="hidden"
@@ -97,12 +108,13 @@ const Cars = () => {
       </motion.div>
 
       <div className="container cars-layout">
-        <button className="cars-filter-toggle" onClick={() => setShowFilters(!showFilters)}>
+        <button type="button" className="cars-filter-toggle" onClick={() => setShowFilters(!showFilters)} aria-expanded={showFilters} aria-controls="cars-filters">
           <FiFilter /> {t('cars.filters')} {hasActiveFilters && <span className="filter-dot" />}
         </button>
 
         <motion.aside
           className={`cars-sidebar ${showFilters ? 'open' : ''}`}
+          id="cars-filters"
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -111,7 +123,7 @@ const Cars = () => {
           <div className="sidebar-header">
             <h3 className="sidebar-title"><FiFilter /> {t('cars.filters')}</h3>
             {hasActiveFilters && (
-              <button className="sidebar-clear" onClick={clearFilters}>
+              <button type="button" className="sidebar-clear" onClick={clearFilters}>
                 <FiX /> {t('cars.clear')}
               </button>
             )}
@@ -119,16 +131,17 @@ const Cars = () => {
 
           <form onSubmit={handleApplyFilters}>
             <div className="form-group">
-              <label className="form-label">{t('search.brand')}</label>
-              <select name="brand" value={filters.brand} onChange={handleFilterChange} className="form-select">
+              <label className="form-label" htmlFor="cars-filter-brand">{t('search.brand')}</label>
+              <select id="cars-filter-brand" name="brand" value={filters.brand} onChange={handleFilterChange} className="form-select">
                 <option value="">{t('search.allBrands')}</option>
                 {brands.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             </div>
 
             <div className="form-group">
-              <label className="form-label">{t('search.model')}</label>
+              <label className="form-label" htmlFor="cars-filter-model">{t('search.model')}</label>
               <input
+                id="cars-filter-model"
                 type="text"
                 name="model"
                 value={filters.model}
@@ -139,8 +152,9 @@ const Cars = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">{t('cars.maxPriceDh')}</label>
+              <label className="form-label" htmlFor="cars-filter-max-price">{t('cars.maxPriceDh')}</label>
               <input
+                id="cars-filter-max-price"
                 type="number"
                 name="maxPrice"
                 value={filters.maxPrice}
@@ -151,8 +165,8 @@ const Cars = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">{t('search.minYearPlaceholder')}</label>
-              <select name="minYear" value={filters.minYear} onChange={handleFilterChange} className="form-select">
+              <label className="form-label" htmlFor="cars-filter-min-year">{t('search.minYearPlaceholder')}</label>
+              <select id="cars-filter-min-year" name="minYear" value={filters.minYear} onChange={handleFilterChange} className="form-select">
                 <option value="">{t('cars.allYears')}</option>
                 {years.map(y => <option key={y} value={y}>{y}</option>)}
               </select>
@@ -164,7 +178,7 @@ const Cars = () => {
           </form>
         </motion.aside>
 
-        <main className="cars-main">
+        <section className="cars-main" aria-label={t('cars.title')}>
           <div className="cars-top-bar">
             <p className="cars-count">
               {loading ? '...' : filters.brand ? `Showing ${filters.brand} cars · ${countLabel}` : countLabel}
@@ -189,14 +203,14 @@ const Cars = () => {
               {cars.length === 0 && (
                 <div className="cars-empty">
                   <p>{t('cars.empty')}</p>
-                  <button className="btn btn-outline" onClick={clearFilters}>
+                  <button type="button" className="btn btn-outline" onClick={clearFilters}>
                     {t('cars.clearFilters')}
                   </button>
                 </div>
               )}
             </motion.div>
           )}
-        </main>
+        </section>
       </div>
     </div>
   );

@@ -70,8 +70,11 @@ const HeroSection = () => {
                 <img
                   key={image}
                   src={image}
-                  alt={`Hero car ${index + 1}`}
+                  alt={`Voiture de luxe AutoSmart Maroc ${index + 1}`}
                   className={`hero-car-img ${index === currentImage ? 'active' : ''}`}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
                 />
               ))}
             </div>

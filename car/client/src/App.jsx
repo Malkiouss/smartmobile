@@ -1,5 +1,6 @@
 import { MotionConfig } from 'framer-motion';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import SEO from './components/SEO';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -18,10 +19,25 @@ import EditCar from './pages/admin/EditCar';
 import AnalyticsDashboard from './pages/admin/AnalyticsDashboard';
 import './App.css';
 
+const AdminSeo = () => {
+  const location = useLocation();
+  if (!location.pathname.startsWith('/admin')) return null;
+
+  return (
+    <SEO
+      title="Administration | AutoSmart Maroc"
+      description="Espace admin reserve AutoSmart Maroc."
+      path={location.pathname}
+      noindex
+    />
+  );
+};
+
 function App() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="app">
+        <AdminSeo />
         <ScrollToTop />
         <Navbar />
         <main className="app-main">

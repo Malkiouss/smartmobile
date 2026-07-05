@@ -84,6 +84,7 @@ const Navbar = () => {
                 to={link.to}
                 className={`navbar-link ${isActive(link.to) ? 'active' : ''}`}
                 onClick={() => setMobileOpen(false)}
+                aria-current={isActive(link.to) ? 'page' : undefined}
               >
                 {link.label}
               </Link>
@@ -95,6 +96,7 @@ const Navbar = () => {
                 to="/admin"
                 className={`navbar-link ${isActive('/admin') ? 'active' : ''}`}
                 onClick={() => setMobileOpen(false)}
+                aria-current={isActive('/admin') ? 'page' : undefined}
               >
                 {t('nav.dashboard')}
               </Link>
@@ -103,7 +105,7 @@ const Navbar = () => {
           <li className="navbar-mobile-actions">
             <LanguageSwitcher mobile />
             {isAdmin ? (
-              <button className="btn btn-outline btn-sm" onClick={() => { logout(); setMobileOpen(false); }}>
+              <button type="button" className="btn btn-outline btn-sm" onClick={() => { logout(); setMobileOpen(false); }}>
                 {t('nav.logout')}
               </button>
             ) : (
@@ -118,16 +120,16 @@ const Navbar = () => {
           <LanguageSwitcher />
           {isAdmin ? (
             <div className="navbar-user-menu">
-              <Link to="/admin" className="navbar-icon-btn" id="admin-dashboard-link" title={t('nav.dashboard')}>
+              <Link to="/admin" className="navbar-icon-btn" id="admin-dashboard-link" title={t('nav.dashboard')} aria-label={t('nav.dashboard')}>
                 <FiUser />
               </Link>
-              <button className="btn btn-outline btn-sm" onClick={logout}>
+              <button type="button" className="btn btn-outline btn-sm" onClick={logout}>
                 {t('nav.logout')}
               </button>
             </div>
           ) : (
             <>
-              <Link to="/login" className="navbar-icon-btn" id="login-link" title={t('nav.login')}>
+              <Link to="/login" className="navbar-icon-btn" id="login-link" title={t('nav.login')} aria-label={t('nav.login')}>
                 <FiUser />
               </Link>
               <Link to="/vendre" className="btn btn-primary btn-sm navbar-cta" id="navbar-cta">
@@ -142,6 +144,9 @@ const Navbar = () => {
           onClick={() => { setMobileOpen(!mobileOpen); setLanguageOpen(false); }}
           id="navbar-hamburger"
           aria-label={t('nav.toggleMenu')}
+          aria-controls="navbar-mobile-menu"
+          aria-expanded={mobileOpen}
+          type="button"
         >
           {mobileOpen ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>

@@ -35,8 +35,8 @@ const BrandsSection = () => {
         <motion.div className="brands-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           {popularBrands.map((brand) => (
             <motion.div key={brand.name} variants={fadeUp}>
-              <Link className="brand-card" to={`/voitures?brand=${encodeURIComponent(brand.name)}`} aria-label={brand.name}>
-                <img src={brand.logo} alt={brand.name} className="brand-logo" />
+              <Link className="brand-card" to={`/voitures?brand=${encodeURIComponent(brand.name)}`} aria-label={`${brand.name} chez AutoSmart Maroc`}>
+                <img src={brand.logo} alt={`Logo ${brand.name}`} className="brand-logo" loading="lazy" decoding="async" />
                 <span className="brand-name">{brand.name}</span>
               </Link>
             </motion.div>
