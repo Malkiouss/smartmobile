@@ -1,9 +1,10 @@
 import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
+import AICarAssistant from './AICarAssistant';
 import api from '../services/api';
 
 const WHATSAPP_NUMBER = '212707852423';
-const INSTAGRAM_URL = 'https://www.instagram.com/autosmartmaroc.ma?igsh=enQ2MmJnM2N6OHkx&utm_source=qr';
+const INSTAGRAM_URL = 'https://www.instagram.com/autosmart.maroc/';
 const FACEBOOK_URL = 'https://www.facebook.com/share/1FbVLk3yJx/?mibextid=wwXIfr';
 
 const WhatsAppButton = ({
@@ -40,6 +41,7 @@ const WhatsAppButton = ({
   if (floating) {
     return (
       <div className={`floating-socials whatsapp-floating ${className}`} aria-label={t('social.contact')}>
+        <AICarAssistant />
         <button
           type="button"
           className="floating-social whatsapp"

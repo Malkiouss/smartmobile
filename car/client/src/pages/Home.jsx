@@ -22,7 +22,7 @@ import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Home.css';
 
 const WHATSAPP_NUMBER = '212707852423';
-const PHONE_DISPLAY = '+212 707-852423';
+const PHONE_DISPLAY = '+212 631-094805';
 
 const socialLinks = [
   { label: 'Facebook', href: 'https://www.facebook.com/share/1FbVLk3yJx/?mibextid=wwXIfr', icon: <FaFacebookF /> },

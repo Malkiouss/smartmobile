@@ -4,8 +4,36 @@ import { useLanguage } from '../context/LanguageContext';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './Contact.css';
 
+const WHATSAPP_URL = 'https://wa.me/212707852423';
+
 const Contact = () => {
   const { t } = useLanguage();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const message = [
+      'New Contact Request',
+      '',
+      'Name:',
+      form.elements.name.value,
+      '',
+      'Email:',
+      form.elements.email.value,
+      '',
+      'Phone:',
+      form.elements.phone?.value || '',
+      '',
+      'Subject:',
+      form.elements.subject.value,
+      '',
+      'Message:',
+      form.elements.message.value,
+    ].join('\n');
+
+    window.location.href = `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
+  };
 
   return (
     <div className="contact-page" id="contact-page">
@@ -20,24 +48,24 @@ const Contact = () => {
         <motion.div className="contact-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <motion.div className="contact-form-card" variants={fadeUp}>
             <h2>{t('contact.formTitle')}</h2>
-            <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+            <form className="contact-form" onSubmit={handleSubmit}>
               <div className="contact-form-row">
                 <div className="form-group">
                   <label className="form-label">{t('contact.name')}</label>
-                  <input type="text" className="form-input" placeholder={t('contact.namePlaceholder')} />
+                  <input type="text" name="name" className="form-input" placeholder={t('contact.namePlaceholder')} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">{t('contact.email')}</label>
-                  <input type="email" className="form-input" placeholder={t('contact.emailPlaceholder')} />
+                  <input type="email" name="email" className="form-input" placeholder={t('contact.emailPlaceholder')} />
                 </div>
               </div>
               <div className="form-group">
                 <label className="form-label">{t('contact.subject')}</label>
-                <input type="text" className="form-input" placeholder={t('contact.subjectPlaceholder')} />
+                <input type="text" name="subject" className="form-input" placeholder={t('contact.subjectPlaceholder')} />
               </div>
               <div className="form-group">
                 <label className="form-label">{t('contact.message')}</label>
-                <textarea className="form-textarea" placeholder={t('contact.messagePlaceholder')} rows="5"></textarea>
+                <textarea name="message" className="form-textarea" placeholder={t('contact.messagePlaceholder')} rows="5"></textarea>
               </div>
               <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
                 {t('contact.send')}
@@ -57,7 +85,7 @@ const Contact = () => {
               <div className="contact-info-icon"><FiPhone /></div>
               <div>
                 <h3>{t('contact.phone')}</h3>
-                <p>+212 707-852423</p>
+                <p>+212 631-094805</p>
               </div>
             </motion.div>
             <motion.div className="contact-info-card" variants={fadeUp} whileHover={{ y: -5, scale: 1.01 }}>

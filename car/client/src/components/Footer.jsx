@@ -69,7 +69,7 @@ const Footer = () => {
             <h4 className="footer-col-title">{t('footer.contact')}</h4>
             <ul className="footer-col-links footer-contact">
               <li><FiMapPin /> {t('contact.addressValue')}</li>
-              <li><FiPhone /> +212 707-852423</li>
+              <li><FiPhone /> +212 631-094805</li>
               <li><FiMail /> amamoucharaf27@gmail.com</li>
             </ul>
           </motion.div>

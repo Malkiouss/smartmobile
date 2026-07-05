@@ -4,8 +4,42 @@ import { useLanguage } from '../context/LanguageContext';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './SellCar.css';
 
+const WHATSAPP_URL = 'https://wa.me/212707852423';
+
 const SellCar = () => {
   const { t } = useLanguage();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+    const message = [
+      'New Sell Request',
+      '',
+      'Name:',
+      form.elements.name.value,
+      '',
+      'Phone:',
+      form.elements.phone.value,
+      '',
+      'Car Brand:',
+      form.elements.brand.value,
+      '',
+      'Model:',
+      form.elements.model.value,
+      '',
+      'Year:',
+      form.elements.year.value,
+      '',
+      'Desired Price:',
+      form.elements.desiredPrice.value,
+      '',
+      'Message:',
+      form.elements.message.value,
+    ].join('\n');
+
+    window.location.href = `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
+  };
 
   const benefits = [
     t('sell.freePost'),
@@ -51,36 +85,36 @@ const SellCar = () => {
             </h2>
             <p className="sell-form-desc">{t('sell.formDesc')}</p>
 
-            <form className="sell-form" onSubmit={(e) => e.preventDefault()}>
+            <form className="sell-form" onSubmit={handleSubmit}>
               <div className="sell-form-grid">
                 <div className="form-group">
                   <label className="form-label">{t('sell.fullName')}</label>
-                  <input type="text" className="form-input" placeholder={t('contact.namePlaceholder')} />
+                  <input type="text" name="name" className="form-input" placeholder={t('contact.namePlaceholder')} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">{t('sell.phone')}</label>
-                  <input type="tel" className="form-input" placeholder="+212 XXX XXX XXX" />
+                  <input type="tel" name="phone" className="form-input" placeholder="+212 XXX XXX XXX" />
                 </div>
                 <div className="form-group">
                   <label className="form-label">{t('search.brand')}</label>
-                  <input type="text" className="form-input" placeholder={t('admin.placeholderBrand')} />
+                  <input type="text" name="brand" className="form-input" placeholder={t('admin.placeholderBrand')} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">{t('search.model')}</label>
-                  <input type="text" className="form-input" placeholder={t('admin.placeholderModel')} />
+                  <input type="text" name="model" className="form-input" placeholder={t('admin.placeholderModel')} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">{t('details.year')}</label>
-                  <input type="number" className="form-input" placeholder={t('admin.placeholderYear')} />
+                  <input type="number" name="year" className="form-input" placeholder={t('admin.placeholderYear')} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">{t('sell.desiredPrice')}</label>
-                  <input type="number" className="form-input" placeholder={t('sell.desiredPricePlaceholder')} />
+                  <input type="number" name="desiredPrice" className="form-input" placeholder={t('sell.desiredPricePlaceholder')} />
                 </div>
               </div>
               <div className="form-group">
                 <label className="form-label">{t('details.description')}</label>
-                <textarea className="form-textarea" placeholder={t('sell.descriptionPlaceholder')} rows="4"></textarea>
+                <textarea name="message" className="form-textarea" placeholder={t('sell.descriptionPlaceholder')} rows="4"></textarea>
               </div>
               <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
                 {t('sell.submit')}

@@ -181,10 +181,7 @@ const Cars = () => {
           ) : (
             <motion.div
               className="cars-grid"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportOnce}
+              initial={false}
             >
               {cars.map((car) => (
                 <CarCard key={car._id} car={car} />
