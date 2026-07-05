@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiHeart, FiCalendar, FiNavigation } from 'react-icons/fi';
@@ -14,9 +14,11 @@ const CarCard = ({ car }) => {
   const { language, t } = useLanguage();
   const isSold = car.status === 'sold';
 
-  const formatNumber = (value) => {
-    return new Intl.NumberFormat(language === 'ar' ? 'ar-MA' : 'fr-MA').format(value);
-  };
+  const numberFormatter = useMemo(
+    () => new Intl.NumberFormat(language === 'ar' ? 'ar-MA' : 'fr-MA'),
+    [language]
+  );
+  const formatNumber = (value) => numberFormatter.format(value);
 
   const imageUrl = getCarImages(car, 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&q=80')[0];
   const detailsPath = `/voitures/${car._id}`;
@@ -74,7 +76,15 @@ const CarCard = ({ car }) => {
       )}
 
       <div className="car-card-image-wrapper">
-        <img src={imageUrl} alt={`${car.name} chez AutoSmart Maroc`} className="car-card-image" loading="lazy" decoding="async" />
+        <img
+          src={imageUrl}
+          alt={`${car.name} chez AutoSmart Maroc`}
+          className="car-card-image"
+          loading="lazy"
+          decoding="async"
+          width="400"
+          height="300"
+        />
         <button
           className={`car-card-heart ${liked ? 'liked' : ''}`}
           onClick={handleLike}
@@ -128,4 +138,4 @@ const CarCard = ({ car }) => {
   );
 };
 
-export default CarCard;
+export default memo(CarCard);

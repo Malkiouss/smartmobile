@@ -1,12 +1,12 @@
 import logo from '../assets/logo.png';
-import { fallbackCarImage, getCarImages } from '../services/images';
+import { fallbackCarImage, getCarImages, optimizeCloudinaryImage } from '../services/images';
 
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://autosmartmaroc.com').replace(/\/$/, '');
 export const SITE_NAME = 'AutoSmart Maroc';
 export const DEFAULT_LOCALE = 'fr_MA';
 export const THEME_COLOR = '#0f172a';
 export const LOGO_URL = new URL(logo, SITE_URL).href;
-export const DEFAULT_IMAGE = 'https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg';
+export const DEFAULT_IMAGE = optimizeCloudinaryImage('https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg', { width: 1200 });
 
 export const BUSINESS = {
   name: SITE_NAME,

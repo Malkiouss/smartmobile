@@ -109,6 +109,7 @@ const AICarAssistant = () => {
   const text = copy[language] || copy.fr;
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [carsLoaded, setCarsLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [open, setOpen] = useState(false);
   const [hasOpened, setHasOpened] = useState(() => {
@@ -121,6 +122,8 @@ const AICarAssistant = () => {
   const [lastUserMessage, setLastUserMessage] = useState('');
 
   useEffect(() => {
+    if (!open || carsLoaded) return undefined;
+
     let cancelled = false;
 
     const fetchCars = async () => {
@@ -130,6 +133,7 @@ const AICarAssistant = () => {
         const res = await api.get('/cars');
         if (!cancelled) {
           setCars(unwrapArray(res.data));
+          setCarsLoaded(true);
         }
       } catch (error) {
         console.error('Error loading assistant cars:', error);
@@ -148,7 +152,7 @@ const AICarAssistant = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [carsLoaded, open]);
 
   useEffect(() => {
     if (hasOpened || open) return undefined;
@@ -384,7 +388,7 @@ const AICarAssistant = () => {
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.22, ease: 'easeOut' }}
                         >
-                          <img src={image} alt={getCarTitle(car)} />
+                          <img src={image} alt={getCarTitle(car)} loading="lazy" decoding="async" width="96" height="72" />
                           <div className="ai-assistant-result-content">
                             <h5>{getCarTitle(car)}</h5>
                             <strong>{formatNumber(car.price)} DH</strong>

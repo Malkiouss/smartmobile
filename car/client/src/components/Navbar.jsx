@@ -70,7 +70,7 @@ const Navbar = () => {
     >
       <div className="container navbar-inner">
         <Link to="/" className="navbar-logo" id="navbar-logo">
-          <img src={logo} alt="AutoSmart Maroc" className="navbar-logo-img" />
+          <img src={logo} alt="AutoSmart Maroc" className="navbar-logo-img" width="1448" height="1086" decoding="async" />
         </Link>
 
         <ul

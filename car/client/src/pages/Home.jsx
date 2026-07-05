@@ -18,6 +18,7 @@ import BrandsSection from '../components/BrandsSection';
 import CarCard from '../components/CarCard';
 import { useLanguage } from '../context/LanguageContext';
 import { breadcrumbSchema, localBusinessSchema, organizationSchema, websiteSchema } from '../seo/schema';
+import { DEFAULT_IMAGE } from '../seo/site';
 import api from '../services/api';
 import { unwrapArray } from '../services/response';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
@@ -185,10 +186,12 @@ const Home = () => {
             </motion.div>
             <motion.div className="home-about-image" variants={fadeUp}>
               <img
-                src="https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg"
+                src={DEFAULT_IMAGE}
                 alt={t('home.showroomAlt')}
                 loading="lazy"
                 decoding="async"
+                width="1200"
+                height="800"
               />
             </motion.div>
           </motion.div>

@@ -3,6 +3,7 @@ import { FiShield, FiStar, FiUsers, FiAward } from 'react-icons/fi';
 import SEO from '../components/SEO';
 import { useLanguage } from '../context/LanguageContext';
 import { breadcrumbSchema } from '../seo/schema';
+import { DEFAULT_IMAGE } from '../seo/site';
 import { fadeUp, staggerContainer, viewportOnce } from '../utils/animations';
 import './About.css';
 
@@ -36,10 +37,12 @@ const About = () => {
           </motion.div>
           <motion.div className="about-story-image" variants={fadeUp}>
             <img
-              src="https://res.cloudinary.com/dylxqjhjj/image/upload/v1779586361/caaaaaaaar_otsgcv.jpg"
+              src={DEFAULT_IMAGE}
               alt={t('about.imageAlt')}
               loading="lazy"
               decoding="async"
+              width="1200"
+              height="800"
             />
           </motion.div>
         </motion.div>

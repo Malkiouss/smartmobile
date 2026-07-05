@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiCalendar, FiHeart, FiNavigation, FiTag, FiPackage, FiArrowLeft } from 'react-icons/fi';
@@ -20,6 +20,10 @@ const CarDetails = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [liked, setLiked] = useState(false);
+  const numberFormatter = useMemo(
+    () => new Intl.NumberFormat(language === 'ar' ? 'ar-MA' : 'fr-MA'),
+    [language]
+  );
 
   useEffect(() => {
     fetchCar();
@@ -71,7 +75,7 @@ const CarDetails = () => {
   );
 
   const isSold = car.status === 'sold';
-  const formatNumber = (value) => new Intl.NumberFormat(language === 'ar' ? 'ar-MA' : 'fr-MA').format(value);
+  const formatNumber = (value) => numberFormatter.format(value);
   const images = getCarImages(car);
 
   const handleLike = async () => {
@@ -128,7 +132,14 @@ const CarDetails = () => {
               whileHover={{ scale: 1.01 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
             >
-              <img src={images[selectedImage]} alt={`${car.name} chez AutoSmart Maroc`} decoding="async" fetchPriority="high" />
+              <img
+                src={images[selectedImage]}
+                alt={`${car.name} chez AutoSmart Maroc`}
+                decoding="async"
+                fetchPriority="high"
+                width="900"
+                height="675"
+              />
             </motion.div>
             {images.length > 1 && (
               <motion.div className="car-details-thumbnails" variants={staggerContainer} initial="hidden" animate="visible">
@@ -142,7 +153,7 @@ const CarDetails = () => {
                     whileTap={{ scale: 0.98 }}
                     aria-label={`${car.name} image ${idx + 1}`}
                   >
-                    <img src={img} alt={`${car.name} - ${idx + 1}`} loading="lazy" decoding="async" />
+                    <img src={img} alt={`${car.name} - ${idx + 1}`} loading="lazy" decoding="async" width="160" height="120" />
                   </motion.button>
                 ))}
               </motion.div>

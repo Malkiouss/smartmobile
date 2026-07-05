@@ -24,7 +24,7 @@ const Footer = () => {
         <motion.div className="footer-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <motion.div className="footer-brand" variants={fadeUp}>
             <Link to="/" className="footer-logo">
-              <img src={logo} alt="AutoSmart Maroc" className="footer-logo-img" />
+              <img src={logo} alt="AutoSmart Maroc" className="footer-logo-img" width="1448" height="1086" loading="lazy" decoding="async" />
             </Link>
             <p className="footer-desc">{t('footer.desc')}</p>
             <div className="footer-socials">
